@@ -1,0 +1,96 @@
+syntax = "proto3";
+
+package workspace_booking_service.api.user.v1;
+
+import "google/protobuf/timestamp.proto";
+import "google/api/annotations.proto";
+import "buf/validate/validate.proto";
+
+option go_package = "github.com/chudik63/workspace-booking-service/pkg/api/user/v1";
+
+service UserService {
+  rpc GetUserById(GetUserByIdRequest) returns (GetUserByIdResponse) {
+    option (google.api.http) = {
+      get: "/api/user/v1/users/{id}"
+    };
+  }
+
+  rpc DeleteUserById(DeleteUserByIdRequest) returns (DeleteUserByIdResponse) {
+    option (google.api.http) = {
+      delete: "/api/user/v1/users/{id}"
+    };
+  }
+
+  rpc CreateUser(CreateUserRequest) returns (CreateUserResponse) {
+    option (google.api.http) = {
+      post: "/api/user/v1/users"
+      body: "*"
+    };
+  }
+
+  rpc UpdateUser(UpdateUserRequest) returns (UpdateUserResponse) {
+    option (google.api.http) = {
+      put: "/api/user/v1/users/{id}"
+      body: "*"
+    };
+  }
+}
+
+message GetUserByIdRequest {
+  int64 id = 1 [(buf.validate.field).int64.gt = 0];
+}
+
+message GetUserByIdResponse {
+  int64 id = 1;
+  string login = 2;
+  string full_name = 3;
+  string phone = 4;
+  google.protobuf.Timestamp created_at = 5;
+  google.protobuf.Timestamp updated_at = 6;
+  bool is_deleted = 7;
+}
+
+message DeleteUserByIdRequest {
+  int64 id = 1 [(buf.validate.field).int64.gt = 0];
+}
+
+message DeleteUserByIdResponse{}
+
+message CreateUserRequest {
+  string login = 1 [(buf.validate.field).string = {
+    max_len: 20,
+    min_len: 1
+  }];
+  string full_name = 2 [(buf.validate.field).string = {
+    max_len: 100,
+    min_len: 1
+  }];
+  string phone = 3 [(buf.validate.field).string = {
+    pattern: "^[+][0-9]{10,15}$",
+    min_len: 11,
+    max_len: 16
+  }];
+}
+
+message CreateUserResponse{
+  int64 id = 1;
+}
+
+message UpdateUserRequest {
+  int64 id = 1 [(buf.validate.field).int64.gt = 0];
+  string login = 2 [(buf.validate.field).string = {
+    max_len: 20,
+    min_len: 1
+  }];
+  string full_name = 3 [(buf.validate.field).string = {
+    max_len: 100,
+    min_len: 1
+  }];
+  string phone = 4 [(buf.validate.field).string = {
+    pattern: "^[+][0-9]{10,15}$",
+    min_len: 11,
+    max_len: 16
+  }];
+}
+
+message UpdateUserResponse{}
