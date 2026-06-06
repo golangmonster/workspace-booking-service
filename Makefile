@@ -5,21 +5,8 @@ export
 # файлы проекта и зависимости, необходимые для сборки.
 LOCAL_BIN := $(CURDIR)/bin
 
-# Шорткат для golangci-lint
-GOLANGCI_BIN := $(LOCAL_BIN)/golangci-lint
-
 # Шорткаты для создания миграций
 migrations_dir := $(CURDIR)/migrations
-
-# Переменная пути к сгенерированным swagger.json
-SWAGGER_SOURCES := $(shell find  pkg/** -name '*.json')
-
-# Переменная со списком бинарников для сборки,
-# по умолчанию только основной бинарник сервиса.
-BUILD_PATHS ?= ./cmd/main
-
-# Дополнительные параметры для сборки приложения.
-BUILD_ENVPARMS ?= CGO_ENABLED=0
 
 # Определяем операционную систему
 PLATFORM := $(shell uname)
@@ -64,12 +51,7 @@ generate-proto:
 # Запустить линтер
 lint:
 	$(info Running lint against all project files...)
-	$(GOLANGCI_BIN) run --config=.golangci.yml ./...
-
-# Сборка приложения
-build:
-	$(info Build application)
-	$(BUILD_ENVPARMS) go build -o $(LOCAL_BIN) $(BUILD_PATHS)
+	$(LOCAL_BIN)/golangci-lint run --config=.golangci.yml ./...
 
 # Создать миграцию
 migration:
@@ -77,20 +59,15 @@ migration:
 	$(LOCAL_BIN)/goose -dir $(migrations_dir) create $(shell bash -c 'read -p "Migration name: " migration_name; echo $$migration_name') sql
 
 migration-up:
-	$(LOCAL_BIN)/goose $(opts) -allow-missing -dir ./migrations postgres "host=$$POSTGRES_HOST port=$$POSTGRES_PORT user=$$POSTGRES_USER password=$$POSTGRES_PASSWORD dbname=$$POSTGRES_DB sslmode=disable" up
+	$(LOCAL_BIN)/goose $(opts) -allow-missing -dir $(migrations_dir) postgres "host=$$POSTGRES_HOST port=$$POSTGRES_PORT user=$$POSTGRES_USER password=$$POSTGRES_PASSWORD dbname=$$POSTGRES_DB sslmode=disable" up
 
 migration-down:
-	$(LOCAL_BIN)/goose $(opts) -dir ./migrations postgres "host=$$POSTGRES_HOST port=$$POSTGRES_PORT user=$$POSTGRES_USER password=$$POSTGRES_PASSWORD dbname=$$POSTGRES_DB sslmode=disable" down
-
-migration-status:
-	$(LOCAL_BIN)/goose $(opts) -dir ./migrations postgres "host=$$POSTGRES_HOST port=$$POSTGRES_PORT user=$$POSTGRES_USER password=$$POSTGRES_PASSWORD dbname=$$POSTGRES_DB sslmode=disable" status
+	$(LOCAL_BIN)/goose $(opts) -dir $(migrations_dir) postgres "host=$$POSTGRES_HOST port=$$POSTGRES_PORT user=$$POSTGRES_USER password=$$POSTGRES_PASSWORD dbname=$$POSTGRES_DB sslmode=disable" down
 
 .PHONY:
 	bin-deps \
  	generate-proto \
  	lint \
- 	build \
  	migration \
  	migration-up \
- 	migration-down \
- 	migration-status
+ 	migration-down 
