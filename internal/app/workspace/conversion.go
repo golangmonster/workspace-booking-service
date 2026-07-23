@@ -86,6 +86,7 @@ func toListWorkspacesResponse(resp *dto.ListWorkspacesResponse) *pb.ListWorkspac
 				Coordinates: toLatLon(w.Lat, w.Lon),
 				FullAddress: w.FullAddress,
 				Type:        workspaceTypeToProto[w.Type],
+				Status:      workspaceStatusToProto[w.Status],
 				Capacity:    w.Capacity,
 				CreatedAt:   timestamppb.New(w.CreatedAt),
 				UpdatedAt:   timestamppb.New(w.UpdatedAt),

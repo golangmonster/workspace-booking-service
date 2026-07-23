@@ -25,6 +25,7 @@ const (
 var (
 	ErrWorkspaceNotFound      = errors.New("workspace not found")
 	ErrWorkspaceAlreadyExists = errors.New("workspace with such name already exists in this type")
+	ErrWorkspaceNotAvailable  = errors.New("workspace is not available for booking")
 )
 
 type Workspace struct {

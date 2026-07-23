@@ -261,7 +261,7 @@ func RegisterWorkspaceServiceHandlerServer(ctx context.Context, mux *runtime.Ser
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
 		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/workspace_booking.api.workspace.v1.WorkspaceService/GetWorkspaceById", runtime.WithHTTPPathPattern("/api/workspace/v1/workspaces/{id}"))
+		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/workspace_booking_service.api.workspace.v1.WorkspaceService/GetWorkspaceById", runtime.WithHTTPPathPattern("/api/workspace/v1/workspaces/{id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -286,7 +286,7 @@ func RegisterWorkspaceServiceHandlerServer(ctx context.Context, mux *runtime.Ser
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
 		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/workspace_booking.api.workspace.v1.WorkspaceService/CreateWorkspace", runtime.WithHTTPPathPattern("/api/workspace/v1/workspaces"))
+		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/workspace_booking_service.api.workspace.v1.WorkspaceService/CreateWorkspace", runtime.WithHTTPPathPattern("/api/workspace/v1/workspaces"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -311,7 +311,7 @@ func RegisterWorkspaceServiceHandlerServer(ctx context.Context, mux *runtime.Ser
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
 		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/workspace_booking.api.workspace.v1.WorkspaceService/UpdateWorkspace", runtime.WithHTTPPathPattern("/api/workspace/v1/workspaces/{id}"))
+		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/workspace_booking_service.api.workspace.v1.WorkspaceService/UpdateWorkspace", runtime.WithHTTPPathPattern("/api/workspace/v1/workspaces/{id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -336,7 +336,7 @@ func RegisterWorkspaceServiceHandlerServer(ctx context.Context, mux *runtime.Ser
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
 		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/workspace_booking.api.workspace.v1.WorkspaceService/DeleteWorkspaceById", runtime.WithHTTPPathPattern("/api/workspace/v1/workspaces/{id}"))
+		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/workspace_booking_service.api.workspace.v1.WorkspaceService/DeleteWorkspaceById", runtime.WithHTTPPathPattern("/api/workspace/v1/workspaces/{id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -361,7 +361,7 @@ func RegisterWorkspaceServiceHandlerServer(ctx context.Context, mux *runtime.Ser
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
 		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/workspace_booking.api.workspace.v1.WorkspaceService/ListWorkspaces", runtime.WithHTTPPathPattern("/api/workspace/v1/list-workspaces"))
+		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/workspace_booking_service.api.workspace.v1.WorkspaceService/ListWorkspaces", runtime.WithHTTPPathPattern("/api/workspace/v1/list-workspaces"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -425,7 +425,7 @@ func RegisterWorkspaceServiceHandlerClient(ctx context.Context, mux *runtime.Ser
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
 		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/workspace_booking.api.workspace.v1.WorkspaceService/GetWorkspaceById", runtime.WithHTTPPathPattern("/api/workspace/v1/workspaces/{id}"))
+		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/workspace_booking_service.api.workspace.v1.WorkspaceService/GetWorkspaceById", runtime.WithHTTPPathPattern("/api/workspace/v1/workspaces/{id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -447,7 +447,7 @@ func RegisterWorkspaceServiceHandlerClient(ctx context.Context, mux *runtime.Ser
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
 		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/workspace_booking.api.workspace.v1.WorkspaceService/CreateWorkspace", runtime.WithHTTPPathPattern("/api/workspace/v1/workspaces"))
+		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/workspace_booking_service.api.workspace.v1.WorkspaceService/CreateWorkspace", runtime.WithHTTPPathPattern("/api/workspace/v1/workspaces"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -469,7 +469,7 @@ func RegisterWorkspaceServiceHandlerClient(ctx context.Context, mux *runtime.Ser
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
 		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/workspace_booking.api.workspace.v1.WorkspaceService/UpdateWorkspace", runtime.WithHTTPPathPattern("/api/workspace/v1/workspaces/{id}"))
+		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/workspace_booking_service.api.workspace.v1.WorkspaceService/UpdateWorkspace", runtime.WithHTTPPathPattern("/api/workspace/v1/workspaces/{id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -491,7 +491,7 @@ func RegisterWorkspaceServiceHandlerClient(ctx context.Context, mux *runtime.Ser
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
 		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/workspace_booking.api.workspace.v1.WorkspaceService/DeleteWorkspaceById", runtime.WithHTTPPathPattern("/api/workspace/v1/workspaces/{id}"))
+		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/workspace_booking_service.api.workspace.v1.WorkspaceService/DeleteWorkspaceById", runtime.WithHTTPPathPattern("/api/workspace/v1/workspaces/{id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -513,7 +513,7 @@ func RegisterWorkspaceServiceHandlerClient(ctx context.Context, mux *runtime.Ser
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
 		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/workspace_booking.api.workspace.v1.WorkspaceService/ListWorkspaces", runtime.WithHTTPPathPattern("/api/workspace/v1/list-workspaces"))
+		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/workspace_booking_service.api.workspace.v1.WorkspaceService/ListWorkspaces", runtime.WithHTTPPathPattern("/api/workspace/v1/list-workspaces"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return

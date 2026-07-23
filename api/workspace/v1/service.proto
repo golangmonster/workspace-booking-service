@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package workspace_booking.api.workspace.v1;
+package workspace_booking_service.api.workspace.v1;
 
 import "google/protobuf/timestamp.proto";
 import "buf/validate/validate.proto";
@@ -166,5 +166,6 @@ message ListWorkspacesResponse {
     uint32 capacity = 6;
     google.protobuf.Timestamp created_at = 7;
     google.protobuf.Timestamp updated_at = 8;
+    WorkspaceStatus status = 9;
   }
 }

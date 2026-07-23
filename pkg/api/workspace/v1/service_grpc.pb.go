@@ -19,11 +19,11 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	WorkspaceService_GetWorkspaceById_FullMethodName    = "/workspace_booking.api.workspace.v1.WorkspaceService/GetWorkspaceById"
-	WorkspaceService_CreateWorkspace_FullMethodName     = "/workspace_booking.api.workspace.v1.WorkspaceService/CreateWorkspace"
-	WorkspaceService_UpdateWorkspace_FullMethodName     = "/workspace_booking.api.workspace.v1.WorkspaceService/UpdateWorkspace"
-	WorkspaceService_DeleteWorkspaceById_FullMethodName = "/workspace_booking.api.workspace.v1.WorkspaceService/DeleteWorkspaceById"
-	WorkspaceService_ListWorkspaces_FullMethodName      = "/workspace_booking.api.workspace.v1.WorkspaceService/ListWorkspaces"
+	WorkspaceService_GetWorkspaceById_FullMethodName    = "/workspace_booking_service.api.workspace.v1.WorkspaceService/GetWorkspaceById"
+	WorkspaceService_CreateWorkspace_FullMethodName     = "/workspace_booking_service.api.workspace.v1.WorkspaceService/CreateWorkspace"
+	WorkspaceService_UpdateWorkspace_FullMethodName     = "/workspace_booking_service.api.workspace.v1.WorkspaceService/UpdateWorkspace"
+	WorkspaceService_DeleteWorkspaceById_FullMethodName = "/workspace_booking_service.api.workspace.v1.WorkspaceService/DeleteWorkspaceById"
+	WorkspaceService_ListWorkspaces_FullMethodName      = "/workspace_booking_service.api.workspace.v1.WorkspaceService/ListWorkspaces"
 )
 
 // WorkspaceServiceClient is the client API for WorkspaceService service.
@@ -228,7 +228,7 @@ func _WorkspaceService_ListWorkspaces_Handler(srv interface{}, ctx context.Conte
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var WorkspaceService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "workspace_booking.api.workspace.v1.WorkspaceService",
+	ServiceName: "workspace_booking_service.api.workspace.v1.WorkspaceService",
 	HandlerType: (*WorkspaceServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{

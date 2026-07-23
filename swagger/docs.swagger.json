@@ -1,10 +1,13 @@
 {
   "swagger": "2.0",
   "info": {
-    "title": "api/user/v1/service.proto",
+    "title": "api/booking/v1/service.proto",
     "version": "version not set"
   },
   "tags": [
+    {
+      "name": "BookingService"
+    },
     {
       "name": "UserService"
     },
@@ -19,6 +22,109 @@
     "application/json"
   ],
   "paths": {
+    "/api/booking/v1/bookings": {
+      "post": {
+        "operationId": "BookingService_CreateBooking",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1CreateBookingResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1CreateBookingRequest"
+            }
+          }
+        ],
+        "tags": [
+          "BookingService"
+        ]
+      }
+    },
+    "/api/booking/v1/bookings/{id}/cancel": {
+      "post": {
+        "operationId": "BookingService_CancelBooking",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1CancelBookingResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "int64"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/BookingServiceCancelBookingBody"
+            }
+          }
+        ],
+        "tags": [
+          "BookingService"
+        ]
+      }
+    },
+    "/api/booking/v1/list-bookings": {
+      "post": {
+        "operationId": "BookingService_ListBookings",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ListBookingsResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1ListBookingsRequest"
+            }
+          }
+        ],
+        "tags": [
+          "BookingService"
+        ]
+      }
+    },
     "/api/user/v1/users": {
       "post": {
         "operationId": "UserService_CreateUser",
@@ -311,42 +417,8 @@
     }
   },
   "definitions": {
-    "ListWorkspacesRequestFilter": {
-      "type": "object",
-      "properties": {
-        "types": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/v1WorkspaceType"
-          }
-        },
-        "statuses": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/v1WorkspaceStatus"
-          }
-        },
-        "capacity_gte": {
-          "type": "integer",
-          "format": "int64"
-        },
-        "full_address": {
-          "type": "string"
-        }
-      }
-    },
-    "ListWorkspacesRequestPage": {
-      "type": "object",
-      "properties": {
-        "limit": {
-          "type": "string",
-          "format": "uint64"
-        },
-        "offset": {
-          "type": "string",
-          "format": "uint64"
-        }
-      }
+    "BookingServiceCancelBookingBody": {
+      "type": "object"
     },
     "UserServiceUpdateUserBody": {
       "type": "object",
@@ -386,6 +458,19 @@
         }
       }
     },
+    "bookingv1Page": {
+      "type": "object",
+      "properties": {
+        "limit": {
+          "type": "string",
+          "format": "uint64"
+        },
+        "offset": {
+          "type": "string",
+          "format": "uint64"
+        }
+      }
+    },
     "protobufAny": {
       "type": "object",
       "properties": {
@@ -411,6 +496,85 @@
             "type": "object",
             "$ref": "#/definitions/protobufAny"
           }
+        }
+      }
+    },
+    "v1Booking": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "int64"
+        },
+        "workspace_id": {
+          "type": "string",
+          "format": "int64"
+        },
+        "user_id": {
+          "type": "string",
+          "format": "int64"
+        },
+        "start_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "end_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "status": {
+          "$ref": "#/definitions/v1BookingStatus"
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updated_at": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "v1BookingStatus": {
+      "type": "string",
+      "enum": [
+        "BOOKING_STATUS_UNSPECIFIED",
+        "BOOKING_STATUS_ACTIVE",
+        "BOOKING_STATUS_CANCELLED",
+        "BOOKING_STATUS_COMPLETED"
+      ],
+      "default": "BOOKING_STATUS_UNSPECIFIED"
+    },
+    "v1CancelBookingResponse": {
+      "type": "object"
+    },
+    "v1CreateBookingRequest": {
+      "type": "object",
+      "properties": {
+        "workspace_id": {
+          "type": "string",
+          "format": "int64"
+        },
+        "user_id": {
+          "type": "string",
+          "format": "int64"
+        },
+        "start_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "end_at": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "v1CreateBookingResponse": {
+      "type": "object",
+      "properties": {
+        "booking_id": {
+          "type": "string",
+          "format": "int64"
         }
       }
     },
@@ -558,14 +722,106 @@
         }
       }
     },
+    "v1ListBookingsRequest": {
+      "type": "object",
+      "properties": {
+        "page": {
+          "$ref": "#/definitions/bookingv1Page"
+        },
+        "filter": {
+          "$ref": "#/definitions/v1ListBookingsRequestFilter"
+        }
+      }
+    },
+    "v1ListBookingsRequestFilter": {
+      "type": "object",
+      "properties": {
+        "user_id": {
+          "type": "string",
+          "format": "int64"
+        },
+        "workspace_id": {
+          "type": "string",
+          "format": "int64"
+        },
+        "statuses": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v1BookingStatus"
+          }
+        },
+        "date_from": {
+          "type": "string",
+          "format": "date-time",
+          "description": "date_from/date_to are truncated to a date on the server and matched\nagainst bookings whose [start_at, end_at) interval overlaps that\n[date_from, date_to] range of days."
+        },
+        "date_to": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "v1ListBookingsResponse": {
+      "type": "object",
+      "properties": {
+        "bookings": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1Booking"
+          }
+        },
+        "total_count": {
+          "type": "integer",
+          "format": "int64"
+        }
+      }
+    },
     "v1ListWorkspacesRequest": {
       "type": "object",
       "properties": {
         "page": {
-          "$ref": "#/definitions/ListWorkspacesRequestPage"
+          "$ref": "#/definitions/v1ListWorkspacesRequestPage"
         },
         "filter": {
-          "$ref": "#/definitions/ListWorkspacesRequestFilter"
+          "$ref": "#/definitions/v1ListWorkspacesRequestFilter"
+        }
+      }
+    },
+    "v1ListWorkspacesRequestFilter": {
+      "type": "object",
+      "properties": {
+        "types": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v1WorkspaceType"
+          }
+        },
+        "statuses": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v1WorkspaceStatus"
+          }
+        },
+        "capacity_gte": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "full_address": {
+          "type": "string"
+        }
+      }
+    },
+    "v1ListWorkspacesRequestPage": {
+      "type": "object",
+      "properties": {
+        "limit": {
+          "type": "string",
+          "format": "uint64"
+        },
+        "offset": {
+          "type": "string",
+          "format": "uint64"
         }
       }
     },
@@ -615,6 +871,9 @@
         "updated_at": {
           "type": "string",
           "format": "date-time"
+        },
+        "status": {
+          "$ref": "#/definitions/v1WorkspaceStatus"
         }
       }
     },

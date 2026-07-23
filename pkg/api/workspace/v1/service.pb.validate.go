@@ -1910,6 +1910,8 @@ func (m *ListWorkspacesResponse_Workspace) validate(all bool) error {
 		}
 	}
 
+	// no validation rules for Status
+
 	if len(errors) > 0 {
 		return ListWorkspacesResponse_WorkspaceMultiError(errors)
 	}

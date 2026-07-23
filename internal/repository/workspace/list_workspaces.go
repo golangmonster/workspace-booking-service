@@ -18,6 +18,7 @@ func (r *repository) ListWorkspaces(ctx context.Context, req *dto.ListWorkspaces
 		"lon",
 		"full_address",
 		"type",
+		"status",
 		"capacity",
 		"created_at",
 		"updated_at",
