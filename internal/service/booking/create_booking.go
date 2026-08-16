@@ -16,6 +16,11 @@ func (s *service) CreateBooking(ctx context.Context, req CreateBookingRequest) (
 	var id int64
 
 	err := s.repo.InTx(ctx, func(ctx context.Context) error {
+		_, err := s.userRepo.GetUserByID(ctx, req.UserID)
+		if err != nil {
+			return fmt.Errorf("get user by id: %w", err)
+		}
+
 		ws, err := s.repo.GetWorkspaceForUpdate(ctx, req.WorkspaceID)
 		if err != nil {
 			return err

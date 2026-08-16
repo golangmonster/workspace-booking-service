@@ -79,7 +79,7 @@ func workspaceFilter(qb squirrel.SelectBuilder, f *dto.WorkspaceFilter) squirrel
 }
 
 func (r *repository) getTotalWorkspacesCount(ctx context.Context, filter *dto.WorkspaceFilter) (uint32, error) {
-	qb := squirrel.Select("COUNT(id)").From("workspaces")
+	qb := squirrel.Select("COUNT(id)").From("workspace")
 
 	qb = workspaceFilter(qb, filter)
 

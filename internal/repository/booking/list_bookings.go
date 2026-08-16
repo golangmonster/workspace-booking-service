@@ -91,9 +91,6 @@ func bookingFilter(qb squirrel.SelectBuilder, f *dto.Filter) squirrel.SelectBuil
 		qb = qb.Where(squirrel.Eq{"status": f.Statuses})
 	}
 
-	// Overlap check: a booking [start_at, end_at) is within the requested
-	// range of days if it ends after the start of DateFrom and starts
-	// before the day after DateTo.
 	if f.DateFrom != nil {
 		qb = qb.Where(squirrel.Gt{"end_at": startOfDay(*f.DateFrom)})
 	}

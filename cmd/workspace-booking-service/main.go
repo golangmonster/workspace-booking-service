@@ -56,7 +56,7 @@ func main() {
 
 	userSrv := userService.New(userRepo)
 	workspaceSrv := workspaceService.New(workspaceRepo)
-	bookingSrv := bookingService.New(bookingRepo)
+	bookingSrv := bookingService.New(bookingRepo, userRepo)
 
 	ctrl := controller.New(&cfg,
 		user.New(userSrv),
