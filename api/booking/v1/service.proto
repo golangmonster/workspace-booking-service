@@ -23,6 +23,13 @@ service BookingService {
     };
   }
 
+  rpc CompleteBooking(CompleteBookingRequest) returns (CompleteBookingResponse) {
+    option (google.api.http) = {
+      post: "/api/booking/v1/bookings/{id}/complete"
+      body: "*"
+    };
+  }
+
   rpc ListBookings(ListBookingsRequest) returns (ListBookingsResponse) {
     option (google.api.http) = {
       post: "/api/booking/v1/list-bookings"
@@ -86,6 +93,12 @@ message CancelBookingRequest {
 }
 
 message CancelBookingResponse {}
+
+message CompleteBookingRequest {
+  int64 id = 1 [(buf.validate.field).int64.gt = 0];
+}
+
+message CompleteBookingResponse {}
 
 message ListBookingsRequest {
   Page page = 1 [(buf.validate.field).required = true];

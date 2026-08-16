@@ -3,27 +3,12 @@ package booking
 import (
 	"context"
 	"errors"
-	"time"
 
 	"github.com/Masterminds/squirrel"
 	"github.com/georgysavva/scany/v2/pgxscan"
 	"github.com/golangmonster/workspace-booking-service/internal/model/workspace"
 	"github.com/jackc/pgx/v5"
 )
-
-type workspaceItem struct {
-	ID          int64     `db:"id"`
-	Name        string    `db:"name"`
-	Lat         float64   `db:"lat"`
-	Lon         float64   `db:"lon"`
-	FullAddress string    `db:"full_address"`
-	Type        string    `db:"type"`
-	Status      string    `db:"status"`
-	Capacity    uint32    `db:"capacity"`
-	CreatedAt   time.Time `db:"created_at"`
-	UpdatedAt   time.Time `db:"updated_at"`
-	IsDeleted   bool      `db:"is_deleted"`
-}
 
 // GetWorkspaceForUpdate locks the workspace row (SELECT ... FOR UPDATE) to serialize
 // concurrent booking attempts for the same workspace, and returns it so the caller

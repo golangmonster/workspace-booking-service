@@ -3,6 +3,7 @@ package booking
 import (
 	"context"
 
+	"github.com/golangmonster/workspace-booking-service/internal/model/booking"
 	"github.com/golangmonster/workspace-booking-service/internal/model/user"
 	"github.com/golangmonster/workspace-booking-service/internal/model/workspace"
 )
@@ -13,6 +14,7 @@ type bookingRepository interface {
 	ListBookings(ctx context.Context, req ListBookingsRequest) (ListBookingsResponse, error)
 	GetWorkspaceForUpdate(ctx context.Context, workspaceID int64) (*workspace.Workspace, error)
 	InTx(ctx context.Context, fn func(ctx context.Context) error) error
+	GetBookingWithLock(ctx context.Context, bookingID int64) (*booking.Booking, error)
 }
 
 type userRepository interface {

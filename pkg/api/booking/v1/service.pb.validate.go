@@ -1068,6 +1068,212 @@ var _ interface {
 	ErrorName() string
 } = CancelBookingResponseValidationError{}
 
+// Validate checks the field values on CompleteBookingRequest with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *CompleteBookingRequest) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on CompleteBookingRequest with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// CompleteBookingRequestMultiError, or nil if none found.
+func (m *CompleteBookingRequest) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *CompleteBookingRequest) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Id
+
+	if len(errors) > 0 {
+		return CompleteBookingRequestMultiError(errors)
+	}
+
+	return nil
+}
+
+// CompleteBookingRequestMultiError is an error wrapping multiple validation
+// errors returned by CompleteBookingRequest.ValidateAll() if the designated
+// constraints aren't met.
+type CompleteBookingRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m CompleteBookingRequestMultiError) Error() string {
+	msgs := make([]string, 0, len(m))
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m CompleteBookingRequestMultiError) AllErrors() []error { return m }
+
+// CompleteBookingRequestValidationError is the validation error returned by
+// CompleteBookingRequest.Validate if the designated constraints aren't met.
+type CompleteBookingRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e CompleteBookingRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e CompleteBookingRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e CompleteBookingRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e CompleteBookingRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e CompleteBookingRequestValidationError) ErrorName() string {
+	return "CompleteBookingRequestValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e CompleteBookingRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sCompleteBookingRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = CompleteBookingRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = CompleteBookingRequestValidationError{}
+
+// Validate checks the field values on CompleteBookingResponse with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *CompleteBookingResponse) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on CompleteBookingResponse with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// CompleteBookingResponseMultiError, or nil if none found.
+func (m *CompleteBookingResponse) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *CompleteBookingResponse) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if len(errors) > 0 {
+		return CompleteBookingResponseMultiError(errors)
+	}
+
+	return nil
+}
+
+// CompleteBookingResponseMultiError is an error wrapping multiple validation
+// errors returned by CompleteBookingResponse.ValidateAll() if the designated
+// constraints aren't met.
+type CompleteBookingResponseMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m CompleteBookingResponseMultiError) Error() string {
+	msgs := make([]string, 0, len(m))
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m CompleteBookingResponseMultiError) AllErrors() []error { return m }
+
+// CompleteBookingResponseValidationError is the validation error returned by
+// CompleteBookingResponse.Validate if the designated constraints aren't met.
+type CompleteBookingResponseValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e CompleteBookingResponseValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e CompleteBookingResponseValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e CompleteBookingResponseValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e CompleteBookingResponseValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e CompleteBookingResponseValidationError) ErrorName() string {
+	return "CompleteBookingResponseValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e CompleteBookingResponseValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sCompleteBookingResponse.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = CompleteBookingResponseValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = CompleteBookingResponseValidationError{}
+
 // Validate checks the field values on ListBookingsRequest with the rules
 // defined in the proto definition for this message. If any rules are
 // violated, the first error encountered is returned, or nil if there are no violations.

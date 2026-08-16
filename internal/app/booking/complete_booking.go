@@ -11,10 +11,10 @@ import (
 	"google.golang.org/grpc/status"
 )
 
-func (i *Implementation) CancelBooking(ctx context.Context, req *pb.CancelBookingRequest) (*pb.CancelBookingResponse, error) {
+func (i *Implementation) CompleteBooking(ctx context.Context, req *pb.CompleteBookingRequest) (*pb.CompleteBookingResponse, error) {
 	err := i.bookingService.UpdateBookingStatus(ctx, dto.UpdateBookingStatus{
 		BookingID: req.Id,
-		Status:    booking.StatusCancelled,
+		Status:    booking.StatusCompleted,
 	})
 	if err != nil {
 		switch {
@@ -27,5 +27,5 @@ func (i *Implementation) CancelBooking(ctx context.Context, req *pb.CancelBookin
 		return nil, err
 	}
 
-	return &pb.CancelBookingResponse{}, nil
+	return &pb.CompleteBookingResponse{}, nil
 }
