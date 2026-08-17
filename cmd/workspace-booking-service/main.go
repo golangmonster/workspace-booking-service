@@ -7,10 +7,12 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/go-co-op/gocron/v2"
 	"github.com/golangmonster/workspace-booking-service/internal/app/booking"
 	"github.com/golangmonster/workspace-booking-service/internal/app/user"
 	"github.com/golangmonster/workspace-booking-service/internal/app/workspace"
 	"github.com/golangmonster/workspace-booking-service/internal/controller"
+	completeExpiredBooking "github.com/golangmonster/workspace-booking-service/internal/process/complete-expired-booking"
 	log "github.com/sirupsen/logrus"
 
 	"github.com/golangmonster/pgxtransactor"
@@ -57,6 +59,25 @@ func main() {
 	userSrv := userService.New(userRepo)
 	workspaceSrv := workspaceService.New(workspaceRepo)
 	bookingSrv := bookingService.New(bookingRepo, userRepo)
+
+	completeExpiredBookingProcess := completeExpiredBooking.NewProcess(bookingRepo)
+
+	scheduler, err := gocron.NewScheduler()
+	if err != nil {
+		log.Error("new scheduler: ", err)
+	}
+
+	// Complete expired bookings
+	if cfg.CompleteExpiredBookingEnabled {
+		_, err = scheduler.NewJob(
+			gocron.DurationJob(cfg.CompleteExpiredBookingDuration),
+			gocron.NewTask(completeExpiredBookingProcess.Run, ctx),
+			gocron.WithSingletonMode(gocron.LimitModeReschedule),
+		)
+		if err != nil {
+			log.Error("new complete expired booking job: ", err)
+		}
+	}
 
 	ctrl := controller.New(&cfg,
 		user.New(userSrv),
