@@ -1,4 +1,43 @@
 services:
+  controller:
+    image: confluentinc/cp-kafka:7.6.1
+    hostname: controller
+    container_name: controller
+    environment:
+      KAFKA_PROCESS_ROLES: "controller"
+      KAFKA_NODE_ID: 1
+      # На каком сокете слушает:
+      KAFKA_LISTENERS: "CONTROLLER://controller:29092"
+      # Участники кворума при определении лидера:
+      KAFKA_CONTROLLER_QUORUM_VOTERS: "1@controller:29092"
+      # По какому префиксу искать первого слушателя при KRaft:
+      KAFKA_CONTROLLER_LISTENER_NAMES: "CONTROLLER"
+      CLUSTER_ID: "MkU3OEVBNTcwNTJENDM2Qk"
+
+  broker:
+    image: confluentinc/cp-kafka:7.6.1
+    hostname: broker
+    container_name: broker
+    ports:
+      - "9095:9092"       # Внутренний порт 9092 для общения внутри Docker
+      - "9091:29092"      # Изменено: Внешний порт 9091 хоста -> 29092 контейнера
+      - "9104:9101"       # JMX
+    environment:
+      KAFKA_NODE_ID: 4
+      KAFKA_PROCESS_ROLES: "broker"
+      # Префикс слушателя у контроллера:
+      KAFKA_CONTROLLER_LISTENER_NAMES: "CONTROLLER"
+      # Префикс слушателя для внутреннего общения брокеров:
+      KAFKA_INTER_BROKER_LISTENER_NAME: "PLAINTEXT"
+      # Изменено: broker-1 слушает на 29092 для внешнего соединения
+      KAFKA_LISTENERS: "PLAINTEXT://broker:9092,PLAINTEXT_HOST://0.0.0.0:29092"
+      # Пары префикс слушателя - протокол безопасности:
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: "CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT"
+      # Изменено: Адрес, по которому внешние клиенты будут подключаться с хоста
+      KAFKA_ADVERTISED_LISTENERS: "PLAINTEXT://broker:9092,PLAINTEXT_HOST://host.docker.internal:9091"
+      KAFKA_CONTROLLER_QUORUM_VOTERS: "1@controller:29092"
+      CLUSTER_ID: "MkU3OEVBNTcwNTJENDM2Qk"
+
   db:
     container_name: workspace-booking-postgres
     image: postgres:15
