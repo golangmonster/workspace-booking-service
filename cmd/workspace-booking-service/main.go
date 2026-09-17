@@ -19,6 +19,7 @@ import (
 
 	"github.com/golangmonster/pgxtransactor"
 	"github.com/golangmonster/workspace-booking-service/internal/config"
+	workspaceBookingProducer "github.com/golangmonster/workspace-booking-service/internal/kafka/producer/workspace-booking"
 	bookingRepository "github.com/golangmonster/workspace-booking-service/internal/repository/booking"
 	outboxRepository "github.com/golangmonster/workspace-booking-service/internal/repository/outbox"
 	userRepository "github.com/golangmonster/workspace-booking-service/internal/repository/user"
@@ -62,7 +63,13 @@ func main() {
 
 	userSrv := userService.New(userRepo)
 	workspaceSrv := workspaceService.New(workspaceRepo)
-	bookingSrv := bookingService.New(bookingRepo, userRepo, outboxRepo, nil, cfg.KafkaWorkspaceBookingTopic)
+	bookingSrv := bookingService.New(
+		bookingRepo,
+		userRepo,
+		outboxRepo,
+		workspaceBookingProducer.MarshalWorkspaceBooking,
+		cfg.KafkaWorkspaceBookingTopic,
+	)
 
 	workspaceBookingProducer, err := producer.New(cfg.KafkaWorkspaceBookingBrokers, cfg.KafkaWorkspaceBookingEnabled)
 	if err != nil {

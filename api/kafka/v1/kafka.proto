@@ -7,7 +7,7 @@ import "google/protobuf/timestamp.proto";
 
 option go_package = "github.com/golangmonster/workspace-booking-service/pkg/api/kafka/v1";
 
-message WorkspaceBooking {
+message WorkspaceBookingMessage {
   int64 booking_id = 1;
   model.v1.BookingStatus status = 2;
   int64 workspace_id = 3;

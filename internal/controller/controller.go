@@ -78,6 +78,7 @@ func (c *controller) ServeGRPC() {
 	c.grpcServer = grpc.NewServer(
 		grpc.ChainUnaryInterceptor(
 			interceptor.WithValidation(),
+			interceptor.WithRecovery(),
 		),
 	)
 

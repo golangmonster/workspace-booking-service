@@ -56,7 +56,7 @@ func (s *service) CreateBooking(ctx context.Context, req CreateBookingRequest) (
 			return err
 		}
 
-		return err
+		return nil
 	})
 	if err != nil {
 		return 0, err

@@ -39,22 +39,22 @@ var (
 	_ = v1.BookingStatus(0)
 )
 
-// Validate checks the field values on WorkspaceBooking with the rules defined
-// in the proto definition for this message. If any rules are violated, the
-// first error encountered is returned, or nil if there are no violations.
-func (m *WorkspaceBooking) Validate() error {
+// Validate checks the field values on WorkspaceBookingMessage with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *WorkspaceBookingMessage) Validate() error {
 	return m.validate(false)
 }
 
-// ValidateAll checks the field values on WorkspaceBooking with the rules
-// defined in the proto definition for this message. If any rules are
+// ValidateAll checks the field values on WorkspaceBookingMessage with the
+// rules defined in the proto definition for this message. If any rules are
 // violated, the result is a list of violation errors wrapped in
-// WorkspaceBookingMultiError, or nil if none found.
-func (m *WorkspaceBooking) ValidateAll() error {
+// WorkspaceBookingMessageMultiError, or nil if none found.
+func (m *WorkspaceBookingMessage) ValidateAll() error {
 	return m.validate(true)
 }
 
-func (m *WorkspaceBooking) validate(all bool) error {
+func (m *WorkspaceBookingMessage) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
@@ -73,7 +73,7 @@ func (m *WorkspaceBooking) validate(all bool) error {
 		switch v := interface{}(m.GetStartAt()).(type) {
 		case interface{ ValidateAll() error }:
 			if err := v.ValidateAll(); err != nil {
-				errors = append(errors, WorkspaceBookingValidationError{
+				errors = append(errors, WorkspaceBookingMessageValidationError{
 					field:  "StartAt",
 					reason: "embedded message failed validation",
 					cause:  err,
@@ -81,7 +81,7 @@ func (m *WorkspaceBooking) validate(all bool) error {
 			}
 		case interface{ Validate() error }:
 			if err := v.Validate(); err != nil {
-				errors = append(errors, WorkspaceBookingValidationError{
+				errors = append(errors, WorkspaceBookingMessageValidationError{
 					field:  "StartAt",
 					reason: "embedded message failed validation",
 					cause:  err,
@@ -90,7 +90,7 @@ func (m *WorkspaceBooking) validate(all bool) error {
 		}
 	} else if v, ok := interface{}(m.GetStartAt()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
-			return WorkspaceBookingValidationError{
+			return WorkspaceBookingMessageValidationError{
 				field:  "StartAt",
 				reason: "embedded message failed validation",
 				cause:  err,
@@ -102,7 +102,7 @@ func (m *WorkspaceBooking) validate(all bool) error {
 		switch v := interface{}(m.GetEndAt()).(type) {
 		case interface{ ValidateAll() error }:
 			if err := v.ValidateAll(); err != nil {
-				errors = append(errors, WorkspaceBookingValidationError{
+				errors = append(errors, WorkspaceBookingMessageValidationError{
 					field:  "EndAt",
 					reason: "embedded message failed validation",
 					cause:  err,
@@ -110,7 +110,7 @@ func (m *WorkspaceBooking) validate(all bool) error {
 			}
 		case interface{ Validate() error }:
 			if err := v.Validate(); err != nil {
-				errors = append(errors, WorkspaceBookingValidationError{
+				errors = append(errors, WorkspaceBookingMessageValidationError{
 					field:  "EndAt",
 					reason: "embedded message failed validation",
 					cause:  err,
@@ -119,7 +119,7 @@ func (m *WorkspaceBooking) validate(all bool) error {
 		}
 	} else if v, ok := interface{}(m.GetEndAt()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
-			return WorkspaceBookingValidationError{
+			return WorkspaceBookingMessageValidationError{
 				field:  "EndAt",
 				reason: "embedded message failed validation",
 				cause:  err,
@@ -128,19 +128,19 @@ func (m *WorkspaceBooking) validate(all bool) error {
 	}
 
 	if len(errors) > 0 {
-		return WorkspaceBookingMultiError(errors)
+		return WorkspaceBookingMessageMultiError(errors)
 	}
 
 	return nil
 }
 
-// WorkspaceBookingMultiError is an error wrapping multiple validation errors
-// returned by WorkspaceBooking.ValidateAll() if the designated constraints
-// aren't met.
-type WorkspaceBookingMultiError []error
+// WorkspaceBookingMessageMultiError is an error wrapping multiple validation
+// errors returned by WorkspaceBookingMessage.ValidateAll() if the designated
+// constraints aren't met.
+type WorkspaceBookingMessageMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
-func (m WorkspaceBookingMultiError) Error() string {
+func (m WorkspaceBookingMessageMultiError) Error() string {
 	msgs := make([]string, 0, len(m))
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
@@ -149,11 +149,11 @@ func (m WorkspaceBookingMultiError) Error() string {
 }
 
 // AllErrors returns a list of validation violation errors.
-func (m WorkspaceBookingMultiError) AllErrors() []error { return m }
+func (m WorkspaceBookingMessageMultiError) AllErrors() []error { return m }
 
-// WorkspaceBookingValidationError is the validation error returned by
-// WorkspaceBooking.Validate if the designated constraints aren't met.
-type WorkspaceBookingValidationError struct {
+// WorkspaceBookingMessageValidationError is the validation error returned by
+// WorkspaceBookingMessage.Validate if the designated constraints aren't met.
+type WorkspaceBookingMessageValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -161,22 +161,24 @@ type WorkspaceBookingValidationError struct {
 }
 
 // Field function returns field value.
-func (e WorkspaceBookingValidationError) Field() string { return e.field }
+func (e WorkspaceBookingMessageValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e WorkspaceBookingValidationError) Reason() string { return e.reason }
+func (e WorkspaceBookingMessageValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e WorkspaceBookingValidationError) Cause() error { return e.cause }
+func (e WorkspaceBookingMessageValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e WorkspaceBookingValidationError) Key() bool { return e.key }
+func (e WorkspaceBookingMessageValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e WorkspaceBookingValidationError) ErrorName() string { return "WorkspaceBookingValidationError" }
+func (e WorkspaceBookingMessageValidationError) ErrorName() string {
+	return "WorkspaceBookingMessageValidationError"
+}
 
 // Error satisfies the builtin error interface
-func (e WorkspaceBookingValidationError) Error() string {
+func (e WorkspaceBookingMessageValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -188,14 +190,14 @@ func (e WorkspaceBookingValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sWorkspaceBooking.%s: %s%s",
+		"invalid %sWorkspaceBookingMessage.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = WorkspaceBookingValidationError{}
+var _ error = WorkspaceBookingMessageValidationError{}
 
 var _ interface {
 	Field() string
@@ -203,4 +205,4 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = WorkspaceBookingValidationError{}
+} = WorkspaceBookingMessageValidationError{}

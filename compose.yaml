@@ -36,7 +36,7 @@ services:
       # Пары префикс слушателя - протокол безопасности:
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: "CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT"
       # Изменено: Адрес, по которому внешние клиенты будут подключаться с хоста
-      KAFKA_ADVERTISED_LISTENERS: "PLAINTEXT://broker:9092,PLAINTEXT_HOST://host.docker.internal:9091"
+      KAFKA_ADVERTISED_LISTENERS: "PLAINTEXT://broker:9092,PLAINTEXT_HOST://localhost:9091"
       KAFKA_CONTROLLER_QUORUM_VOTERS: "1@controller:29092"
       CLUSTER_ID: "MkU3OEVBNTcwNTJENDM2Qk"
 
