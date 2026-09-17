@@ -6,10 +6,11 @@ import (
 
 	"github.com/Masterminds/squirrel"
 	"github.com/georgysavva/scany/v2/pgxscan"
+	"github.com/golangmonster/workspace-booking-service/internal/model/booking"
 	dto "github.com/golangmonster/workspace-booking-service/internal/service/booking"
 )
 
-func (r *repository) CreateBooking(ctx context.Context, req dto.CreateBookingRequest) (int64, error) {
+func (r *repository) CreateBooking(ctx context.Context, req dto.CreateBookingRequest) (*booking.Booking, error) {
 	t := time.Now().UTC()
 
 	qb := squirrel.Insert("booking").
@@ -31,19 +32,19 @@ func (r *repository) CreateBooking(ctx context.Context, req dto.CreateBookingReq
 			t,
 			t,
 		).
-		Suffix("RETURNING id")
+		Suffix("RETURNING id, user_id, workspace_id, start_at, end_at, status, created_at, updated_at")
 
 	sql, args, err := qb.PlaceholderFormat(squirrel.Dollar).ToSql()
 	if err != nil {
-		return 0, err
+		return nil, err
 	}
 
-	var id int64
+	var item bookingItem
 
-	err = pgxscan.Get(ctx, r.pool.Querier(ctx), &id, sql, args...)
+	err = pgxscan.Get(ctx, r.pool.Querier(ctx), &item, sql, args...)
 	if err != nil {
-		return 0, err
+		return nil, err
 	}
 
-	return id, nil
+	return toBooking(item), nil
 }

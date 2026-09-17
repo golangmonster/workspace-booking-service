@@ -12,12 +12,15 @@ import (
 	"github.com/golangmonster/workspace-booking-service/internal/app/user"
 	"github.com/golangmonster/workspace-booking-service/internal/app/workspace"
 	"github.com/golangmonster/workspace-booking-service/internal/controller"
+	"github.com/golangmonster/workspace-booking-service/internal/kafka/producer"
 	completeExpiredBooking "github.com/golangmonster/workspace-booking-service/internal/process/complete-expired-booking"
+	"github.com/golangmonster/workspace-booking-service/internal/process/outbox"
 	log "github.com/sirupsen/logrus"
 
 	"github.com/golangmonster/pgxtransactor"
 	"github.com/golangmonster/workspace-booking-service/internal/config"
 	bookingRepository "github.com/golangmonster/workspace-booking-service/internal/repository/booking"
+	outboxRepository "github.com/golangmonster/workspace-booking-service/internal/repository/outbox"
 	userRepository "github.com/golangmonster/workspace-booking-service/internal/repository/user"
 	workspaceRepository "github.com/golangmonster/workspace-booking-service/internal/repository/workspace"
 	bookingService "github.com/golangmonster/workspace-booking-service/internal/service/booking"
@@ -55,16 +58,29 @@ func main() {
 	userRepo := userRepository.New(pgxTx)
 	workspaceRepo := workspaceRepository.New(pgxTx)
 	bookingRepo := bookingRepository.New(pgxTx)
+	outboxRepo := outboxRepository.New(pgxTx)
 
 	userSrv := userService.New(userRepo)
 	workspaceSrv := workspaceService.New(workspaceRepo)
-	bookingSrv := bookingService.New(bookingRepo, userRepo)
+	bookingSrv := bookingService.New(bookingRepo, userRepo, outboxRepo, nil, cfg.KafkaWorkspaceBookingTopic)
+
+	workspaceBookingProducer, err := producer.New(cfg.KafkaWorkspaceBookingBrokers, cfg.KafkaWorkspaceBookingEnabled)
+	if err != nil {
+		log.Fatal("new workspace booking producer: ", err)
+	}
+	defer func() {
+		err := workspaceBookingProducer.Close()
+		if err != nil {
+			log.Error("close workspace booking producer", err)
+		}
+	}()
 
 	completeExpiredBookingProcess := completeExpiredBooking.NewProcess(bookingRepo)
+	workspaceBookingOutboxProcess := outbox.NewProcess(workspaceBookingProducer, outboxRepo, cfg.KafkaWorkspaceBookingTopic)
 
 	scheduler, err := gocron.NewScheduler()
 	if err != nil {
-		log.Error("new scheduler: ", err)
+		log.Fatal("new scheduler: ", err)
 	}
 
 	// Complete expired bookings
@@ -75,9 +91,23 @@ func main() {
 			gocron.WithSingletonMode(gocron.LimitModeReschedule),
 		)
 		if err != nil {
-			log.Error("new complete expired booking job: ", err)
+			log.Fatal("new complete expired booking job: ", err)
 		}
 	}
+
+	// Outbox for workspace-booking
+	if cfg.WorkspaceBookingOutboxEnabled {
+		_, err = scheduler.NewJob(
+			gocron.DurationJob(cfg.WorkspaceBookingOutboxDuration),
+			gocron.NewTask(workspaceBookingOutboxProcess.Run, ctx),
+			gocron.WithSingletonMode(gocron.LimitModeReschedule),
+		)
+		if err != nil {
+			log.Fatal("new workspace booking outbox job: ", err)
+		}
+	}
+
+	scheduler.Start()
 
 	ctrl := controller.New(&cfg,
 		user.New(userSrv),
@@ -94,10 +124,17 @@ func main() {
 
 	<-sigch
 
+	// Shutting down
+
 	shutdownCtx, cancel := context.WithTimeout(ctx, shutdownTime)
 	defer cancel()
 
 	ctrl.Stop(shutdownCtx)
+
+	err = scheduler.ShutdownWithContext(shutdownCtx)
+	if err != nil {
+		log.Fatal("scheduler shutdown: ", err)
+	}
 
 	log.Info("service finished")
 }

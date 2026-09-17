@@ -4,16 +4,16 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/golangmonster/workspace-booking-service/internal/model/booking"
+	model "github.com/golangmonster/workspace-booking-service/internal/model/booking"
 	"github.com/golangmonster/workspace-booking-service/internal/model/workspace"
 )
 
 func (s *service) CreateBooking(ctx context.Context, req CreateBookingRequest) (int64, error) {
 	if !req.StartAt.Before(req.EndAt) {
-		return 0, booking.ErrInvalidTimeRange
+		return 0, model.ErrInvalidTimeRange
 	}
 
-	var id int64
+	var booking *model.Booking
 
 	err := s.repo.InTx(ctx, func(ctx context.Context) error {
 		_, err := s.userRepo.GetUserByID(ctx, req.UserID)
@@ -33,7 +33,7 @@ func (s *service) CreateBooking(ctx context.Context, req CreateBookingRequest) (
 		existing, err := s.repo.ListBookings(ctx, ListBookingsRequest{
 			Filter: &Filter{
 				WorkspaceID: &req.WorkspaceID,
-				Statuses:    []booking.Status{booking.StatusActive},
+				Statuses:    []model.Status{model.StatusActive},
 			},
 		})
 		if err != nil {
@@ -42,11 +42,19 @@ func (s *service) CreateBooking(ctx context.Context, req CreateBookingRequest) (
 
 		for _, b := range existing.Bookings {
 			if req.StartAt.Before(b.EndAt) && b.StartAt.Before(req.EndAt) {
-				return booking.ErrBookingOverlap
+				return model.ErrBookingOverlap
 			}
 		}
 
-		id, err = s.repo.CreateBooking(ctx, req)
+		booking, err = s.repo.CreateBooking(ctx, req)
+		if err != nil {
+			return fmt.Errorf("create booking: %w", err)
+		}
+
+		err = s.insertWorkspaceBookingOutbox(ctx, booking)
+		if err != nil {
+			return err
+		}
 
 		return err
 	})
@@ -54,5 +62,5 @@ func (s *service) CreateBooking(ctx context.Context, req CreateBookingRequest) (
 		return 0, err
 	}
 
-	return id, nil
+	return booking.ID, nil
 }

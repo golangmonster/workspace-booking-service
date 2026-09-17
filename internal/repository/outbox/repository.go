@@ -1,15 +1,6 @@
-package user
+package outbox
 
-import (
-	"github.com/golangmonster/pgxtransactor"
-)
-
-const (
-	uniqueViolationCode = "23505"
-
-	loginUniqueConstraintName = "unique_login"
-	phoneUniqueConstraintName = "unique_phone"
-)
+import "github.com/golangmonster/pgxtransactor"
 
 type repository struct {
 	pgxtransactor.Transactor

@@ -5,6 +5,7 @@ package workspace_booking_service.api.booking.v1;
 import "google/protobuf/timestamp.proto";
 import "google/api/annotations.proto";
 import "buf/validate/validate.proto";
+import "api/model/v1/model.proto";
 
 option go_package = "github.com/golangmonster/workspace-booking-service/pkg/api/booking/v1";
 
@@ -38,13 +39,6 @@ service BookingService {
   }
 }
 
-enum BookingStatus {
-  BOOKING_STATUS_UNSPECIFIED = 0;
-  BOOKING_STATUS_ACTIVE = 1;
-  BOOKING_STATUS_CANCELLED = 2;
-  BOOKING_STATUS_COMPLETED = 3;
-}
-
 message Booking {
   int64 id = 1;
 
@@ -54,7 +48,7 @@ message Booking {
   google.protobuf.Timestamp start_at = 4;
   google.protobuf.Timestamp end_at = 5;
 
-  BookingStatus status = 6;
+  model.v1.BookingStatus status = 6;
 
   google.protobuf.Timestamp created_at = 7;
   google.protobuf.Timestamp updated_at = 8;
@@ -110,8 +104,8 @@ message ListBookingsRequest {
 
     optional int64 workspace_id = 2;
 
-    repeated BookingStatus statuses = 3 [
-      (buf.validate.field).repeated.items.enum.defined_only = true
+    repeated model.v1.BookingStatus statuses = 3 [
+      (buf.validate.field).repeated.items.enum = {not_in: [0]}
     ];
 
     // date_from/date_to are truncated to a date on the server and matched

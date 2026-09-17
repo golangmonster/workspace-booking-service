@@ -18,6 +18,8 @@ services:
     image: confluentinc/cp-kafka:7.6.1
     hostname: broker
     container_name: broker
+    env_file:
+      - .env
     ports:
       - "9095:9092"       # Внутренний порт 9092 для общения внутри Docker
       - "9091:29092"      # Изменено: Внешний порт 9091 хоста -> 29092 контейнера
@@ -37,6 +39,38 @@ services:
       KAFKA_ADVERTISED_LISTENERS: "PLAINTEXT://broker:9092,PLAINTEXT_HOST://host.docker.internal:9091"
       KAFKA_CONTROLLER_QUORUM_VOTERS: "1@controller:29092"
       CLUSTER_ID: "MkU3OEVBNTcwNTJENDM2Qk"
+
+  kafka-init-topics:
+    image: confluentinc/cp-kafka:7.6.1
+    container_name: kafka-init-topics
+    env_file:
+      - .env
+    depends_on:
+      - broker
+    entrypoint: [ "sh", "-c" ]
+    command: |
+      "
+      echo 'Waiting for Kafka to be ready...'
+      cub kafka-ready -b broker:9092 1 30
+
+      echo 'Creating Kafka topics...'
+      kafka-topics --create --if-not-exists --bootstrap-server broker:9092 --partitions 1 --replication-factor 1 --topic ${KAFKA_WORKSPACE_BOOKING_TOPIC}
+
+      echo 'All topics created successfully!'
+      "
+
+  kafka-ui:
+    image: provectuslabs/kafka-ui:latest
+    container_name: kafka-ui
+    ports:
+      - "8080:8080"  # Интерфейс будет доступен на http://localhost:8080
+    depends_on:
+      - broker
+    environment:
+      DYNAMIC_CONFIG_ENABLED: "true"
+      KAFKA_CLUSTERS_0_NAME: "local-cluster"
+      # Подключаемся по внутреннему имени сервиса и порту
+      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: "broker:9092"
 
   db:
     container_name: workspace-booking-postgres
@@ -59,7 +93,6 @@ services:
       - db_volume:/var/lib/postgresql/data
     networks:
       - workspace_booking_network
-
 
 volumes:
   db_volume:

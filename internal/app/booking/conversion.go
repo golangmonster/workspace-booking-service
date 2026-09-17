@@ -5,23 +5,24 @@ import (
 	"github.com/golangmonster/workspace-booking-service/internal/model/page"
 	dto "github.com/golangmonster/workspace-booking-service/internal/service/booking"
 	pb "github.com/golangmonster/workspace-booking-service/pkg/api/booking/v1"
+	modelpb "github.com/golangmonster/workspace-booking-service/pkg/api/model/v1"
 	"github.com/samber/lo"
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
 var (
-	bookingStatusToModel = map[pb.BookingStatus]booking.Status{
-		pb.BookingStatus_BOOKING_STATUS_UNSPECIFIED: booking.StatusUnspecified,
-		pb.BookingStatus_BOOKING_STATUS_ACTIVE:      booking.StatusActive,
-		pb.BookingStatus_BOOKING_STATUS_CANCELLED:   booking.StatusCancelled,
-		pb.BookingStatus_BOOKING_STATUS_COMPLETED:   booking.StatusCompleted,
+	bookingStatusToModel = map[modelpb.BookingStatus]booking.Status{
+		modelpb.BookingStatus_BOOKING_STATUS_UNSPECIFIED: booking.StatusUnspecified,
+		modelpb.BookingStatus_BOOKING_STATUS_ACTIVE:      booking.StatusActive,
+		modelpb.BookingStatus_BOOKING_STATUS_CANCELLED:   booking.StatusCancelled,
+		modelpb.BookingStatus_BOOKING_STATUS_COMPLETED:   booking.StatusCompleted,
 	}
 
-	bookingStatusToProto = map[booking.Status]pb.BookingStatus{
-		booking.StatusUnspecified: pb.BookingStatus_BOOKING_STATUS_UNSPECIFIED,
-		booking.StatusActive:      pb.BookingStatus_BOOKING_STATUS_ACTIVE,
-		booking.StatusCancelled:   pb.BookingStatus_BOOKING_STATUS_CANCELLED,
-		booking.StatusCompleted:   pb.BookingStatus_BOOKING_STATUS_COMPLETED,
+	bookingStatusToProto = map[booking.Status]modelpb.BookingStatus{
+		booking.StatusUnspecified: modelpb.BookingStatus_BOOKING_STATUS_UNSPECIFIED,
+		booking.StatusActive:      modelpb.BookingStatus_BOOKING_STATUS_ACTIVE,
+		booking.StatusCancelled:   modelpb.BookingStatus_BOOKING_STATUS_CANCELLED,
+		booking.StatusCompleted:   modelpb.BookingStatus_BOOKING_STATUS_COMPLETED,
 	}
 )
 
@@ -32,7 +33,7 @@ func toListBookingsRequest(req *pb.ListBookingsRequest) dto.ListBookingsRequest 
 		filter = &dto.Filter{
 			UserID:      req.Filter.UserId,
 			WorkspaceID: req.Filter.WorkspaceId,
-			Statuses: lo.Map(req.Filter.Statuses, func(s pb.BookingStatus, _ int) booking.Status {
+			Statuses: lo.Map(req.Filter.Statuses, func(s modelpb.BookingStatus, _ int) booking.Status {
 				return bookingStatusToModel[s]
 			}),
 		}

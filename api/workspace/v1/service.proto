@@ -98,7 +98,7 @@ message CreateWorkspaceRequest {
     max_len: 100,
     min_len: 1
   }];
-  WorkspaceType type = 4 [(buf.validate.field).enum.defined_only = true];
+  WorkspaceType type = 4 [(buf.validate.field).enum = {not_in: [0]}];
   uint32 capacity = 5 [(buf.validate.field).uint32.gt = 0];
 }
 
@@ -118,10 +118,10 @@ message UpdateWorkspaceRequest {
     min_len: 1
   }];
   WorkspaceType type = 5 [(buf.validate.field).enum = {
-    defined_only: true
+    not_in: [0]
   }];
   uint32 capacity = 6 [(buf.validate.field).uint32.gt = 0];
-  WorkspaceStatus status = 7 [(buf.validate.field).enum.defined_only = true];
+  WorkspaceStatus status = 7 [(buf.validate.field).enum = {not_in: [0]}];
 }
 
 message UpdateWorkspaceResponse {}
@@ -138,10 +138,10 @@ message ListWorkspacesRequest {
 
   message Filter {
     repeated WorkspaceType types = 2 [(buf.validate.field).repeated.items.enum = {
-      defined_only: true
+      not_in: [0]
     }];
     repeated WorkspaceStatus statuses = 3 [(buf.validate.field).repeated.items.enum = {
-      defined_only: true
+      not_in: [0]
     }];
     optional uint32 capacity_gte = 4;
     optional string full_address = 5;

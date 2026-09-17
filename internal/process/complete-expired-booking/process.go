@@ -2,9 +2,8 @@ package complete_expired_booking
 
 import (
 	"context"
+	"fmt"
 	"time"
-
-	log "github.com/sirupsen/logrus"
 )
 
 type process struct {
@@ -17,11 +16,11 @@ func NewProcess(bookingRepo bookingRepository) *process {
 	}
 }
 
-func (p *process) Run(ctx context.Context) {
-	go func() {
-		err := p.bookingRepo.CompleteExpiredBookings(ctx, time.Now().UTC())
-		if err != nil {
-			log.Error("complete expired bookings: ", err)
-		}
-	}()
+func (p *process) Run(ctx context.Context) error {
+	err := p.bookingRepo.CompleteExpiredBookings(ctx, time.Now().UTC())
+	if err != nil {
+		return fmt.Errorf("complete expired bookings: %w", err)
+	}
+
+	return nil
 }

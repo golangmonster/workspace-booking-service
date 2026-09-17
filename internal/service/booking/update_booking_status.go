@@ -18,9 +18,14 @@ func (s *service) UpdateBookingStatus(ctx context.Context, req UpdateBookingStat
 			return fmt.Errorf("%w from %s to %s", model.ErrInvalidStatusTransition, booking.Status, req.Status)
 		}
 
-		err = s.repo.UpdateBookingStatus(ctx, req)
+		booking, err = s.repo.UpdateBookingStatus(ctx, req)
 		if err != nil {
 			return fmt.Errorf("update booking status: %w", err)
+		}
+
+		err = s.insertWorkspaceBookingOutbox(ctx, booking)
+		if err != nil {
+			return err
 		}
 
 		return nil
