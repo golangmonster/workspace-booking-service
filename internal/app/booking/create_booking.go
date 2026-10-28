@@ -32,6 +32,8 @@ func (i *Implementation) CreateBooking(ctx context.Context, req *pb.CreateBookin
 			return nil, status.Error(codes.FailedPrecondition, err.Error())
 		case errors.Is(err, booking.ErrBookingOverlap):
 			return nil, status.Error(codes.FailedPrecondition, err.Error())
+		case errors.Is(err, booking.ErrAlreadyBooked):
+			return nil, status.Error(codes.AlreadyExists, err.Error())
 		case errors.Is(err, user.ErrUserNotFound):
 			return nil, status.Error(codes.NotFound, err.Error())
 		}

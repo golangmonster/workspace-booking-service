@@ -2,10 +2,12 @@ package booking
 
 import (
 	"context"
+	"errors"
 	"time"
 
 	"github.com/Masterminds/squirrel"
 	"github.com/georgysavva/scany/v2/pgxscan"
+	"github.com/jackc/pgx/v5/pgconn"
 
 	"github.com/golangmonster/workspace-booking-service/internal/model/booking"
 	dto "github.com/golangmonster/workspace-booking-service/internal/service/booking"
@@ -44,6 +46,17 @@ func (r *repository) CreateBooking(ctx context.Context, req dto.CreateBookingReq
 
 	err = pgxscan.Get(ctx, r.pool.Querier(ctx), &item, sql, args...)
 	if err != nil {
+		var pgErr *pgconn.PgError
+		if errors.As(err, &pgErr) {
+			if pgErr.Code == uniqueViolationCode {
+				switch pgErr.ConstraintName {
+				case bookingUniqueUserWorkspaceUniqueConstraint:
+
+					return nil, booking.ErrAlreadyBooked
+				}
+			}
+		}
+
 		return nil, err
 	}
 

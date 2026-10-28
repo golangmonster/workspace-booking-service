@@ -2,9 +2,11 @@ package booking
 
 import (
 	"context"
+	"errors"
 
 	"github.com/Masterminds/squirrel"
 	"github.com/georgysavva/scany/v2/pgxscan"
+	"github.com/jackc/pgx/v5"
 
 	"github.com/golangmonster/workspace-booking-service/internal/model/booking"
 )
@@ -32,6 +34,10 @@ func (r *repository) GetBookingWithLock(ctx context.Context, bookingID int64) (*
 
 	err = pgxscan.Get(ctx, r.pool.Querier(ctx), &item, sql, args...)
 	if err != nil {
+		if errors.Is(err, pgx.ErrNoRows) {
+			return nil, booking.ErrBookingNotFound
+		}
+
 		return nil, err
 	}
 

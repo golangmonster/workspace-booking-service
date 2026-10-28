@@ -11,6 +11,7 @@ var (
 	ErrBookingOverlap          = errors.New("workspace is already booked for this time slot")
 	ErrInvalidTimeRange        = errors.New("start time must be before end time")
 	ErrInvalidStatusTransition = errors.New("invalid status transition")
+	ErrAlreadyBooked           = errors.New("user already has a booking for this workspace")
 )
 
 type Status string
