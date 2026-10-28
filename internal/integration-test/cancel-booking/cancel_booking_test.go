@@ -13,7 +13,6 @@ import (
 	workspaceBooking "github.com/golangmonster/workspace-booking-service/internal/kafka/producer/workspace-booking"
 	bookingRepository "github.com/golangmonster/workspace-booking-service/internal/repository/booking"
 	outboxRepository "github.com/golangmonster/workspace-booking-service/internal/repository/outbox"
-	userRepository "github.com/golangmonster/workspace-booking-service/internal/repository/user"
 	bookingService "github.com/golangmonster/workspace-booking-service/internal/service/booking"
 	pb "github.com/golangmonster/workspace-booking-service/pkg/api/booking/v1"
 )
@@ -30,7 +29,7 @@ func TestCancelBooking(t *testing.T) {
 			tx := pgxtransactor.New(db.Pool)
 			srv := bookingService.New(
 				bookingRepository.New(tx),
-				userRepository.New(tx),
+				nil,
 				outboxRepository.New(tx),
 				workspaceBooking.MarshalWorkspaceBooking,
 				"workspace-booking",
