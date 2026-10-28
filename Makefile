@@ -57,6 +57,11 @@ lint:
 	$(GOLANGCI_BIN) fmt
 	$(GOLANGCI_BIN) run --config=.golangci.yml ./...
 
+# Запустить интеграционные тесты
+.PHONY: integration-test
+integration-test:
+	go test ./internal/integration-test/... -v -tags=integration
+
 # Создать миграцию
 migration:
 	mkdir -p $(migrations_dir)
@@ -74,4 +79,4 @@ migration-down:
  	lint \
  	migration \
  	migration-up \
- 	migration-down 
+	migration-down

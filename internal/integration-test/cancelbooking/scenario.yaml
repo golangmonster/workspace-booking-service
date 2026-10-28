@@ -1,0 +1,23 @@
+- name: active_booking
+  description: Меняет ACTIVE на CANCELLED, создаёт outbox и сохраняет вторую бронь.
+  directory: testcase1
+
+- name: booking_not_found
+  description: 'Отсутствующая бронь: возвращается доменная ошибка booking not found; база и outbox не меняются.'
+  directory: testcase2
+  error: 'get booking with lock: booking not found'
+
+- name: from_cancelled
+  description: Запрещён переход из CANCELLED в CANCELLED; outbox не создаётся.
+  directory: testcase3
+  error: invalid status transition from CANCELLED to CANCELLED
+
+- name: from_completed
+  description: Запрещён переход из COMPLETED в CANCELLED; outbox не создаётся.
+  directory: testcase4
+  error: invalid status transition from COMPLETED to CANCELLED
+
+- name: from_unspecified
+  description: Запрещён переход из UNSPECIFIED в CANCELLED; outbox не создаётся.
+  directory: testcase5
+  error: invalid status transition from UNSPECIFIED to CANCELLED

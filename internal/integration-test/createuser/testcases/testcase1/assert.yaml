@@ -1,0 +1,6 @@
+users:
+  - id: 10001
+    login: newuser
+    full_name: New User
+    phone: "+79990003344"
+    is_deleted: false

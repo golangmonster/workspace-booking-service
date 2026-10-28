@@ -1,0 +1,93 @@
+- name: created
+  description: Создаёт ACTIVE-бронь и сообщение outbox, сохраняя остальные данные.
+  directory: testcase1
+
+- name: equal_timestamps
+  description: Одинаковые начало и конец запрещены до обращения к базе.
+  directory: testcase2
+  error: start time must be before end time
+
+- name: reversed_timestamps
+  description: Начало позже конца запрещено до обращения к базе.
+  directory: testcase3
+  error: start time must be before end time
+
+- name: user_not_found
+  description: 'Несуществующий пользователь: бронь и outbox не создаются.'
+  directory: testcase4
+  error: 'get user by id: user not found'
+
+- name: user_deleted
+  description: Мягко удалённый пользователь считается отсутствующим.
+  directory: testcase5
+  error: 'get user by id: user not found'
+
+- name: workspace_not_found
+  description: 'Несуществующее рабочее место: транзакция не меняет базу.'
+  directory: testcase6
+  error: 'get workspace for update: workspace not found'
+
+- name: workspace_booked
+  description: Нельзя забронировать место со статусом BOOKED.
+  directory: testcase7
+  error: workspace is not available for booking
+
+- name: workspace_maintenance
+  description: Нельзя забронировать место со статусом MAINTENANCE.
+  directory: testcase8
+  error: workspace is not available for booking
+
+- name: workspace_unspecified
+  description: Нельзя забронировать место со статусом UNSPECIFIED.
+  directory: testcase9
+  error: workspace is not available for booking
+
+- name: overlap_exact
+  description: 'Пересечение ACTIVE-брони на том же месте запрещено: overlap_exact.'
+  directory: testcase10
+  error: workspace is already booked for this time slot
+
+- name: overlap_left
+  description: 'Пересечение ACTIVE-брони на том же месте запрещено: overlap_left.'
+  directory: testcase11
+  error: workspace is already booked for this time slot
+
+- name: overlap_right
+  description: 'Пересечение ACTIVE-брони на том же месте запрещено: overlap_right.'
+  directory: testcase12
+  error: workspace is already booked for this time slot
+
+- name: overlap_inside
+  description: 'Пересечение ACTIVE-брони на том же месте запрещено: overlap_inside.'
+  directory: testcase13
+  error: workspace is already booked for this time slot
+
+- name: overlap_encloses
+  description: 'Пересечение ACTIVE-брони на том же месте запрещено: overlap_encloses.'
+  directory: testcase14
+  error: workspace is already booked for this time slot
+
+- name: touching_before
+  description: Интервал, заканчивающийся в начале другой брони, разрешён.
+  directory: testcase15
+
+- name: touching_after
+  description: Интервал, начинающийся в конце другой брони, разрешён.
+  directory: testcase16
+
+- name: other_workspace
+  description: Пересечение с бронью другого места не мешает созданию.
+  directory: testcase17
+
+- name: overlap_cancelled
+  description: Бронь со статусом CANCELLED не участвует в проверке пересечения.
+  directory: testcase18
+
+- name: overlap_completed
+  description: Бронь со статусом COMPLETED не участвует в проверке пересечения.
+  directory: testcase19
+
+- name: same_user_workspace_unique
+  description: 'У пользователя уже есть бронь этого рабочего места: возвращается понятная ошибка, база и outbox не меняются.'
+  directory: testcase20
+  error: 'create booking: user already has a booking for this workspace'

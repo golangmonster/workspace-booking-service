@@ -1,0 +1,8 @@
+- name: existing_user
+  description: "Удаляет существующего пользователя: выставляет is_deleted, сохраняя строку и остальные поля."
+  directory: testcase1
+
+- name: missing_user
+  description: "Возвращает user not found для отсутствующего ID, не меняя существующего пользователя."
+  directory: testcase2
+  error: "delete user: user not found"

@@ -1,0 +1,8 @@
+- name: existing_user
+  description: "Обновляет логин, имя и телефон существующего пользователя."
+  directory: testcase1
+
+- name: missing_user
+  description: "Возвращает user not found для отсутствующего ID и сохраняет состояние базы."
+  directory: testcase2
+  error: "update user: user not found"

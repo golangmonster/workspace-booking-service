@@ -1,0 +1,13 @@
+- name: new_user
+  description: "Создаёт пользователя и возвращает его ID."
+  directory: testcase1
+
+- name: duplicate_login
+  description: "Отклоняет существующий логин при новом телефоне, не добавляя пользователя."
+  directory: testcase2
+  error: "insert user: user with this login already exists"
+
+- name: duplicate_phone
+  description: "Отклоняет существующий телефон при новом логине, не добавляя пользователя."
+  directory: testcase3
+  error: "insert user: user with this phone already exists"

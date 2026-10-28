@@ -1,0 +1,8 @@
+users:
+  - id: 1
+    login: user1
+    full_name: Test User
+    phone: "+79990001122"
+    created_at: "2026-01-01T10:00:00Z"
+    updated_at: "2026-01-01T11:00:00Z"
+    is_deleted: false

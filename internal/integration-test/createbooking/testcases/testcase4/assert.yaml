@@ -1,0 +1,44 @@
+users:
+  - id: 1
+    login: user1
+    full_name: Test User
+    phone: '+79990001122'
+    created_at: '2026-01-01T10:00:00Z'
+    updated_at: '2026-01-01T11:00:00Z'
+    is_deleted: false
+  - id: 2
+    login: user2
+    full_name: Test User
+    phone: '+79990002233'
+    created_at: '2026-01-01T10:00:00Z'
+    updated_at: '2026-01-01T11:00:00Z'
+    is_deleted: false
+workspace:
+  - id: 1
+    name: Desk 1
+    full_address: Moscow, Test Street 1
+    lat: '55.75000'
+    lon: '37.61000'
+    type: DESK
+    status: AVAILABLE
+    capacity: 1
+    created_at: '2026-01-01T10:00:00Z'
+    updated_at: '2026-01-01T11:00:00Z'
+    is_deleted: false
+  - id: 2
+    name: Desk 2
+    full_address: Moscow, Test Street 1
+    lat: '55.75000'
+    lon: '37.61000'
+    type: DESK
+    status: AVAILABLE
+    capacity: 1
+    created_at: '2026-01-01T10:00:00Z'
+    updated_at: '2026-01-01T11:00:00Z'
+    is_deleted: false
+outbox:
+  - id: 7
+    topic: existing-topic
+    aggregate_id: existing
+    message_value: '{"existing":true}'
+    created_at: '2026-01-01T10:00:00Z'
