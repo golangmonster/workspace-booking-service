@@ -6,8 +6,9 @@ import (
 
 	"github.com/Masterminds/squirrel"
 	"github.com/georgysavva/scany/v2/pgxscan"
-	"github.com/golangmonster/workspace-booking-service/internal/model/user"
 	"github.com/jackc/pgx/v5"
+
+	"github.com/golangmonster/workspace-booking-service/internal/model/user"
 )
 
 func (r *repository) GetUserByID(ctx context.Context, id int64) (*user.User, error) {

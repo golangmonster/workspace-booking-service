@@ -6,12 +6,13 @@ import (
 
 	"github.com/Masterminds/squirrel"
 	"github.com/georgysavva/scany/v2/pgxscan"
+	"github.com/samber/lo"
+
 	"github.com/golangmonster/workspace-booking-service/internal/model/booking"
 	dto "github.com/golangmonster/workspace-booking-service/internal/service/booking"
-	"github.com/samber/lo"
 )
 
-func (r *repository) ListBookings(ctx context.Context, req dto.ListBookingsRequest) (dto.ListBookingsResponse, error) {
+func (r *repository) ListBookings(ctx context.Context, req dto.ListBookingsRequest) (*dto.ListBookingsResponse, error) {
 	qb := squirrel.Select(
 		"id",
 		"workspace_id",
@@ -32,22 +33,22 @@ func (r *repository) ListBookings(ctx context.Context, req dto.ListBookingsReque
 
 	sql, args, err := qb.ToSql()
 	if err != nil {
-		return dto.ListBookingsResponse{}, err
+		return nil, err
 	}
 
 	var items []bookingItem
 
 	err = pgxscan.Select(ctx, r.pool.Querier(ctx), &items, sql, args...)
 	if err != nil {
-		return dto.ListBookingsResponse{}, err
+		return nil, err
 	}
 
 	totalCount, err := r.getTotalBookingsCount(ctx, req.Filter)
 	if err != nil {
-		return dto.ListBookingsResponse{}, err
+		return nil, err
 	}
 
-	return dto.ListBookingsResponse{
+	return &dto.ListBookingsResponse{
 		Bookings: lo.Map(items, func(item bookingItem, _ int) *booking.Booking {
 			return toBooking(item)
 		}),

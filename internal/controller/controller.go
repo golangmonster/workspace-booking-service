@@ -5,9 +5,8 @@ import (
 	"errors"
 	"net"
 	"net/http"
+	"time"
 
-	"github.com/golangmonster/workspace-booking-service/internal/config"
-	interceptor "github.com/golangmonster/workspace-booking-service/internal/controller/middleware/grpc"
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"github.com/rs/cors"
 	log "github.com/sirupsen/logrus"
@@ -16,6 +15,13 @@ import (
 	"google.golang.org/grpc/credentials/insecure"
 	"google.golang.org/grpc/reflection"
 	"google.golang.org/protobuf/encoding/protojson"
+
+	"github.com/golangmonster/workspace-booking-service/internal/config"
+	interceptor "github.com/golangmonster/workspace-booking-service/internal/controller/middleware/grpc"
+)
+
+const (
+	readHeaderTimeout = 5 * time.Second
 )
 
 type ImplementationAdapter interface {
@@ -38,7 +44,7 @@ func New(cfg *config.Config, implementations ...ImplementationAdapter) *controll
 }
 
 func (c *controller) Run(ctx context.Context) {
-	c.ServeGRPC()
+	c.ServeGRPC(ctx)
 	c.ServeHTTP(ctx)
 }
 
@@ -69,8 +75,10 @@ func (c *controller) Stop(ctx context.Context) {
 	}
 }
 
-func (c *controller) ServeGRPC() {
-	lis, err := net.Listen("tcp", c.cfg.GRPCAddr)
+func (c *controller) ServeGRPC(ctx context.Context) {
+	var lc net.ListenConfig
+
+	lis, err := lc.Listen(ctx, "tcp", c.cfg.GRPCAddr)
 	if err != nil {
 		log.Fatalf("%v: failed to listen grpc port: %s", c.cfg.GRPCAddr, err)
 	}
@@ -121,8 +129,9 @@ func (c *controller) ServeHTTP(ctx context.Context) {
 	httpMux.Handle(prefix, http.StripPrefix(prefix, fs))
 
 	c.httpServer = &http.Server{
-		Addr:    c.cfg.HTTPAddr,
-		Handler: cors.AllowAll().Handler(httpMux),
+		Addr:              c.cfg.HTTPAddr,
+		Handler:           cors.AllowAll().Handler(httpMux),
+		ReadHeaderTimeout: readHeaderTimeout,
 	}
 
 	go func() {

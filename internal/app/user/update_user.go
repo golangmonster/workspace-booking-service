@@ -4,11 +4,12 @@ import (
 	"context"
 	"errors"
 
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
+
 	model "github.com/golangmonster/workspace-booking-service/internal/model/user"
 	dto "github.com/golangmonster/workspace-booking-service/internal/service/user"
 	pb "github.com/golangmonster/workspace-booking-service/pkg/api/user/v1"
-	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/status"
 )
 
 func (i *Implementation) UpdateUser(ctx context.Context, req *pb.UpdateUserRequest) (*pb.UpdateUserResponse, error) {

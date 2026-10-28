@@ -4,11 +4,12 @@ import (
 	"context"
 	"errors"
 
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
+
 	model "github.com/golangmonster/workspace-booking-service/internal/model/workspace"
 	dto "github.com/golangmonster/workspace-booking-service/internal/service/workspace"
 	pb "github.com/golangmonster/workspace-booking-service/pkg/api/workspace/v1"
-	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/status"
 )
 
 func (i *Implementation) UpdateWorkspace(ctx context.Context, req *pb.UpdateWorkspaceRequest) (*pb.UpdateWorkspaceResponse, error) {

@@ -11,6 +11,9 @@ migrations_dir := $(CURDIR)/migrations
 # Определяем операционную систему
 PLATFORM := $(shell uname)
 
+# Шорткаты для линтеров
+GOLANGCI_BIN := $(LOCAL_BIN)/golangci-lint
+
 PROTOC_VERSION := 31.1
 PROTOC_ZIP := protoc-$(PROTOC_VERSION)-linux-x86_64.zip
 ifeq ($(PLATFORM),Darwin)
@@ -34,7 +37,7 @@ bin-deps:
 	cp /tmp/protoc/bin/protoc $(LOCAL_BIN)/
 	cp -r /tmp/protoc/include $(LOCAL_BIN)/include
 	rm -rf /tmp/$(PROTOC_ZIP) /tmp/protoc
-	GOBIN=$(LOCAL_BIN) go install github.com/golangci/golangci-lint/cmd/golangci-lint@v1.64.8
+	GOBIN=$(LOCAL_BIN) go install github.com/golangci/golangci-lint/v2/cmd/golangci-lint@v2.13.2
 	GOBIN=$(LOCAL_BIN) go install github.com/pressly/goose/v3/cmd/goose@v3.18.0
 	GOBIN=$(LOCAL_BIN) go install github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-grpc-gateway@v2.19.1
 	GOBIN=$(LOCAL_BIN) go install github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-openapiv2@v2.19.1
@@ -51,7 +54,8 @@ generate-proto:
 # Запустить линтер
 lint:
 	$(info Running lint against all project files...)
-	$(LOCAL_BIN)/golangci-lint run --config=.golangci.yml ./...
+	$(GOLANGCI_BIN) fmt
+	$(GOLANGCI_BIN) run --config=.golangci.yml ./...
 
 # Создать миграцию
 migration:

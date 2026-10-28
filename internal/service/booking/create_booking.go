@@ -23,7 +23,7 @@ func (s *service) CreateBooking(ctx context.Context, req CreateBookingRequest) (
 
 		ws, err := s.repo.GetWorkspaceForUpdate(ctx, req.WorkspaceID)
 		if err != nil {
-			return err
+			return fmt.Errorf("get workspace for update: %w", err)
 		}
 
 		if ws.Status != workspace.StatusAvailable {

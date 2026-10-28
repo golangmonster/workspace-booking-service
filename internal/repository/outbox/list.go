@@ -5,8 +5,9 @@ import (
 
 	"github.com/Masterminds/squirrel"
 	"github.com/georgysavva/scany/v2/pgxscan"
-	"github.com/golangmonster/workspace-booking-service/internal/model/outbox"
 	"github.com/samber/lo"
+
+	"github.com/golangmonster/workspace-booking-service/internal/model/outbox"
 )
 
 func (r *repository) ListOutboxItems(ctx context.Context, topic string, limit uint64) ([]outbox.Outbox, error) {
@@ -26,7 +27,7 @@ func (r *repository) ListOutboxItems(ctx context.Context, topic string, limit ui
 	}
 
 	var items []outboxItem
-	
+
 	if err := pgxscan.Select(ctx, r.pool.Querier(ctx), &items, sql, args...); err != nil {
 		return nil, err
 	}

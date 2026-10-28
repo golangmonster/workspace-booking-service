@@ -6,8 +6,9 @@ import (
 
 	"github.com/Masterminds/squirrel"
 	"github.com/georgysavva/scany/v2/pgxscan"
-	model "github.com/golangmonster/workspace-booking-service/internal/model/workspace"
 	"github.com/jackc/pgx/v5"
+
+	model "github.com/golangmonster/workspace-booking-service/internal/model/workspace"
 )
 
 func (r *repository) GetWorkspaceByID(ctx context.Context, id int64) (*model.Workspace, error) {

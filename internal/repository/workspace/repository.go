@@ -12,7 +12,7 @@ const (
 
 type repository struct {
 	pgxtransactor.Transactor
-	
+
 	pool *pgxtransactor.Pool
 }
 

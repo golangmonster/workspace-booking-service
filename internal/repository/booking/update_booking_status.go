@@ -7,9 +7,10 @@ import (
 
 	"github.com/Masterminds/squirrel"
 	"github.com/georgysavva/scany/v2/pgxscan"
+	"github.com/jackc/pgx/v5"
+
 	"github.com/golangmonster/workspace-booking-service/internal/model/booking"
 	dto "github.com/golangmonster/workspace-booking-service/internal/service/booking"
-	"github.com/jackc/pgx/v5"
 )
 
 func (r *repository) UpdateBookingStatus(ctx context.Context, req dto.UpdateBookingStatus) (*booking.Booking, error) {

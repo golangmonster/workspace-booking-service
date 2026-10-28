@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/Masterminds/squirrel"
+
 	"github.com/golangmonster/workspace-booking-service/internal/model/outbox"
 )
 

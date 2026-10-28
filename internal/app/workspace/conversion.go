@@ -1,12 +1,13 @@
 package workspace
 
 import (
+	"github.com/samber/lo"
+	"google.golang.org/protobuf/types/known/timestamppb"
+
 	"github.com/golangmonster/workspace-booking-service/internal/model/page"
 	model "github.com/golangmonster/workspace-booking-service/internal/model/workspace"
 	dto "github.com/golangmonster/workspace-booking-service/internal/service/workspace"
 	pb "github.com/golangmonster/workspace-booking-service/pkg/api/workspace/v1"
-	"github.com/samber/lo"
-	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
 var (

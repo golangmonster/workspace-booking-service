@@ -14,6 +14,6 @@ func (s *service) CreateWorkspace(ctx context.Context, req *CreateWorkspaceReque
 	if err != nil {
 		return nil, fmt.Errorf("insert workspace: %w", err)
 	}
-	
+
 	return workspace, nil
 }

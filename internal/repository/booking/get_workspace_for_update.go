@@ -6,8 +6,9 @@ import (
 
 	"github.com/Masterminds/squirrel"
 	"github.com/georgysavva/scany/v2/pgxscan"
-	"github.com/golangmonster/workspace-booking-service/internal/model/workspace"
 	"github.com/jackc/pgx/v5"
+
+	"github.com/golangmonster/workspace-booking-service/internal/model/workspace"
 )
 
 // GetWorkspaceForUpdate locks the workspace row (SELECT ... FOR UPDATE) to serialize

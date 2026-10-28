@@ -4,11 +4,12 @@ import (
 	"context"
 	"errors"
 
-	model "github.com/golangmonster/workspace-booking-service/internal/model/user"
-	pb "github.com/golangmonster/workspace-booking-service/pkg/api/user/v1"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/types/known/timestamppb"
+
+	model "github.com/golangmonster/workspace-booking-service/internal/model/user"
+	pb "github.com/golangmonster/workspace-booking-service/pkg/api/user/v1"
 )
 
 func (i *Implementation) GetUserById(ctx context.Context, req *pb.GetUserByIdRequest) (*pb.GetUserByIdResponse, error) {

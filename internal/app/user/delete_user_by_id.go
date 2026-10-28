@@ -4,10 +4,11 @@ import (
 	"context"
 	"errors"
 
-	model "github.com/golangmonster/workspace-booking-service/internal/model/user"
-	pb "github.com/golangmonster/workspace-booking-service/pkg/api/user/v1"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
+
+	model "github.com/golangmonster/workspace-booking-service/internal/model/user"
+	pb "github.com/golangmonster/workspace-booking-service/pkg/api/user/v1"
 )
 
 func (i *Implementation) DeleteUserById(ctx context.Context, req *pb.DeleteUserByIdRequest) (*pb.DeleteUserByIdResponse, error) {

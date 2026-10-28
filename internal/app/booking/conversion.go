@@ -1,13 +1,14 @@
 package booking
 
 import (
+	"github.com/samber/lo"
+	"google.golang.org/protobuf/types/known/timestamppb"
+
 	"github.com/golangmonster/workspace-booking-service/internal/model/booking"
 	"github.com/golangmonster/workspace-booking-service/internal/model/page"
 	dto "github.com/golangmonster/workspace-booking-service/internal/service/booking"
 	pb "github.com/golangmonster/workspace-booking-service/pkg/api/booking/v1"
 	modelpb "github.com/golangmonster/workspace-booking-service/pkg/api/model/v1"
-	"github.com/samber/lo"
-	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
 var (
@@ -58,7 +59,7 @@ func toListBookingsRequest(req *pb.ListBookingsRequest) dto.ListBookingsRequest 
 	}
 }
 
-func toListBookingsResponse(resp dto.ListBookingsResponse) *pb.ListBookingsResponse {
+func toListBookingsResponse(resp *dto.ListBookingsResponse) *pb.ListBookingsResponse {
 	return &pb.ListBookingsResponse{
 		Bookings: lo.Map(resp.Bookings, func(b *booking.Booking, _ int) *pb.Booking {
 			return toBooking(b)

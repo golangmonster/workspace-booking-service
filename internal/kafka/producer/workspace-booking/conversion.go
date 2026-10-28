@@ -3,11 +3,12 @@ package workspace_booking
 import (
 	"fmt"
 
+	"google.golang.org/protobuf/encoding/protojson"
+	"google.golang.org/protobuf/types/known/timestamppb"
+
 	model "github.com/golangmonster/workspace-booking-service/internal/model/booking"
 	kafkapb "github.com/golangmonster/workspace-booking-service/pkg/api/kafka/v1"
 	modelpb "github.com/golangmonster/workspace-booking-service/pkg/api/model/v1"
-	"google.golang.org/protobuf/encoding/protojson"
-	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
 var (

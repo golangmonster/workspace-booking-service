@@ -11,6 +11,6 @@ func (i *Implementation) ListWorkspaces(ctx context.Context, req *pb.ListWorkspa
 	if err != nil {
 		return nil, err
 	}
-	
+
 	return toListWorkspacesResponse(resp), nil
 }

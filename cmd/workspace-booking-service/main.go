@@ -8,18 +8,20 @@ import (
 	"time"
 
 	"github.com/go-co-op/gocron/v2"
+	"github.com/golangmonster/pgxtransactor"
+	"github.com/jackc/pgx/v5/pgxpool"
+	"github.com/kelseyhightower/envconfig"
+	log "github.com/sirupsen/logrus"
+
 	"github.com/golangmonster/workspace-booking-service/internal/app/booking"
 	"github.com/golangmonster/workspace-booking-service/internal/app/user"
 	"github.com/golangmonster/workspace-booking-service/internal/app/workspace"
+	"github.com/golangmonster/workspace-booking-service/internal/config"
 	"github.com/golangmonster/workspace-booking-service/internal/controller"
 	"github.com/golangmonster/workspace-booking-service/internal/kafka/producer"
+	workspaceBookingProducer "github.com/golangmonster/workspace-booking-service/internal/kafka/producer/workspace-booking"
 	completeExpiredBooking "github.com/golangmonster/workspace-booking-service/internal/process/complete-expired-booking"
 	"github.com/golangmonster/workspace-booking-service/internal/process/outbox"
-	log "github.com/sirupsen/logrus"
-
-	"github.com/golangmonster/pgxtransactor"
-	"github.com/golangmonster/workspace-booking-service/internal/config"
-	workspaceBookingProducer "github.com/golangmonster/workspace-booking-service/internal/kafka/producer/workspace-booking"
 	bookingRepository "github.com/golangmonster/workspace-booking-service/internal/repository/booking"
 	outboxRepository "github.com/golangmonster/workspace-booking-service/internal/repository/outbox"
 	userRepository "github.com/golangmonster/workspace-booking-service/internal/repository/user"
@@ -27,9 +29,6 @@ import (
 	bookingService "github.com/golangmonster/workspace-booking-service/internal/service/booking"
 	userService "github.com/golangmonster/workspace-booking-service/internal/service/user"
 	workspaceService "github.com/golangmonster/workspace-booking-service/internal/service/workspace"
-	"github.com/kelseyhightower/envconfig"
-
-	"github.com/jackc/pgx/v5/pgxpool"
 )
 
 const (
@@ -43,14 +42,18 @@ func main() {
 
 	err := envconfig.Process("", &cfg)
 	if err != nil {
-		log.Fatal("failed to load config ", err)
+		log.Error("failed to load config ", err)
+
+		return
 	}
 
 	ctx := context.Background()
 
 	pool, err := pgxpool.New(ctx, cfg.PostgresDSN)
 	if err != nil {
-		log.Fatal("failed to connect to postgres ", err)
+		log.Error("failed to connect to postgres ", err)
+
+		return
 	}
 	defer pool.Close()
 
@@ -73,7 +76,9 @@ func main() {
 
 	workspaceBookingProducer, err := producer.New(cfg.KafkaWorkspaceBookingBrokers, cfg.KafkaWorkspaceBookingEnabled)
 	if err != nil {
-		log.Fatal("new workspace booking producer: ", err)
+		log.Error("new workspace booking producer: ", err)
+
+		return
 	}
 	defer func() {
 		err := workspaceBookingProducer.Close()
@@ -87,7 +92,9 @@ func main() {
 
 	scheduler, err := gocron.NewScheduler()
 	if err != nil {
-		log.Fatal("new scheduler: ", err)
+		log.Error("new scheduler: ", err)
+
+		return
 	}
 
 	// Complete expired bookings
@@ -98,7 +105,9 @@ func main() {
 			gocron.WithSingletonMode(gocron.LimitModeReschedule),
 		)
 		if err != nil {
-			log.Fatal("new complete expired booking job: ", err)
+			log.Error("new complete expired booking job: ", err)
+
+			return
 		}
 	}
 
@@ -110,7 +119,9 @@ func main() {
 			gocron.WithSingletonMode(gocron.LimitModeReschedule),
 		)
 		if err != nil {
-			log.Fatal("new workspace booking outbox job: ", err)
+			log.Error("new workspace booking outbox job: ", err)
+
+			return
 		}
 	}
 
@@ -140,7 +151,9 @@ func main() {
 
 	err = scheduler.ShutdownWithContext(shutdownCtx)
 	if err != nil {
-		log.Fatal("scheduler shutdown: ", err)
+		log.Error("scheduler shutdown: ", err)
+
+		return
 	}
 
 	log.Info("service finished")

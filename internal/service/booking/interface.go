@@ -12,7 +12,7 @@ import (
 type bookingRepository interface {
 	CreateBooking(ctx context.Context, req CreateBookingRequest) (*booking.Booking, error)
 	UpdateBookingStatus(ctx context.Context, req UpdateBookingStatus) (*booking.Booking, error)
-	ListBookings(ctx context.Context, req ListBookingsRequest) (ListBookingsResponse, error)
+	ListBookings(ctx context.Context, req ListBookingsRequest) (*ListBookingsResponse, error)
 	GetWorkspaceForUpdate(ctx context.Context, workspaceID int64) (*workspace.Workspace, error)
 	InTx(ctx context.Context, fn func(ctx context.Context) error) error
 	GetBookingWithLock(ctx context.Context, bookingID int64) (*booking.Booking, error)

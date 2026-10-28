@@ -2,6 +2,7 @@ package booking
 
 import (
 	"errors"
+	"slices"
 	"time"
 )
 
@@ -30,13 +31,7 @@ var (
 )
 
 func StatusTransitionAllowed(from, to Status) bool {
-	for _, allowed := range allowedStatusTransitions[from] {
-		if to == allowed {
-			return true
-		}
-	}
-
-	return false
+	return slices.Contains(allowedStatusTransitions[from], to)
 }
 
 type Booking struct {

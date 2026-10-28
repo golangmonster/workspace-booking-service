@@ -6,9 +6,10 @@ import (
 	"time"
 
 	"github.com/Masterminds/squirrel"
+	"github.com/jackc/pgx/v5/pgconn"
+
 	"github.com/golangmonster/workspace-booking-service/internal/model/user"
 	dto "github.com/golangmonster/workspace-booking-service/internal/service/user"
-	"github.com/jackc/pgx/v5/pgconn"
 )
 
 func (r *repository) UpdateUser(ctx context.Context, req *dto.UpdateUserRequest) error {

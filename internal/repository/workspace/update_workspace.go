@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/Masterminds/squirrel"
+
 	model "github.com/golangmonster/workspace-booking-service/internal/model/workspace"
 	dto "github.com/golangmonster/workspace-booking-service/internal/service/workspace"
 )

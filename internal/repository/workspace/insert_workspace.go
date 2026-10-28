@@ -7,9 +7,10 @@ import (
 
 	"github.com/Masterminds/squirrel"
 	"github.com/georgysavva/scany/v2/pgxscan"
+	"github.com/jackc/pgx/v5/pgconn"
+
 	model "github.com/golangmonster/workspace-booking-service/internal/model/workspace"
 	dto "github.com/golangmonster/workspace-booking-service/internal/service/workspace"
-	"github.com/jackc/pgx/v5/pgconn"
 )
 
 func (r *repository) InsertWorkspace(ctx context.Context, req *dto.CreateWorkspaceRequest) (*model.Workspace, error) {

@@ -6,6 +6,7 @@ import (
 
 	"github.com/Masterminds/squirrel"
 	"github.com/georgysavva/scany/v2/pgxscan"
+
 	"github.com/golangmonster/workspace-booking-service/internal/model/booking"
 	dto "github.com/golangmonster/workspace-booking-service/internal/service/booking"
 )

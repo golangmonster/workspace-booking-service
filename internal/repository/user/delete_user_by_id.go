@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/Masterminds/squirrel"
+
 	"github.com/golangmonster/workspace-booking-service/internal/model/user"
 )
 

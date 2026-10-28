@@ -4,13 +4,14 @@ import (
 	"context"
 	"errors"
 
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
+
 	"github.com/golangmonster/workspace-booking-service/internal/model/booking"
 	"github.com/golangmonster/workspace-booking-service/internal/model/user"
 	"github.com/golangmonster/workspace-booking-service/internal/model/workspace"
 	dto "github.com/golangmonster/workspace-booking-service/internal/service/booking"
 	pb "github.com/golangmonster/workspace-booking-service/pkg/api/booking/v1"
-	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/status"
 )
 
 func (i *Implementation) CreateBooking(ctx context.Context, req *pb.CreateBookingRequest) (*pb.CreateBookingResponse, error) {

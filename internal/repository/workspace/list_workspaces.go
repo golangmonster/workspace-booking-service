@@ -5,9 +5,10 @@ import (
 
 	"github.com/Masterminds/squirrel"
 	"github.com/georgysavva/scany/v2/pgxscan"
+	"github.com/samber/lo"
+
 	model "github.com/golangmonster/workspace-booking-service/internal/model/workspace"
 	dto "github.com/golangmonster/workspace-booking-service/internal/service/workspace"
-	"github.com/samber/lo"
 )
 
 func (r *repository) ListWorkspaces(ctx context.Context, req *dto.ListWorkspacesRequest) (*dto.ListWorkspacesResponse, error) {

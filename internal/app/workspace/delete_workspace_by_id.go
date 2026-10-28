@@ -4,10 +4,11 @@ import (
 	"context"
 	"errors"
 
-	model "github.com/golangmonster/workspace-booking-service/internal/model/workspace"
-	pb "github.com/golangmonster/workspace-booking-service/pkg/api/workspace/v1"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
+
+	model "github.com/golangmonster/workspace-booking-service/internal/model/workspace"
+	pb "github.com/golangmonster/workspace-booking-service/pkg/api/workspace/v1"
 )
 
 func (i *Implementation) DeleteWorkspaceById(ctx context.Context, req *pb.DeleteWorkspaceByIdRequest) (*pb.DeleteWorkspaceByIdResponse, error) {

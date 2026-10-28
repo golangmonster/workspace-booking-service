@@ -4,11 +4,12 @@ import (
 	"context"
 	"errors"
 
-	model "github.com/golangmonster/workspace-booking-service/internal/model/workspace"
-	pb "github.com/golangmonster/workspace-booking-service/pkg/api/workspace/v1"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/types/known/timestamppb"
+
+	model "github.com/golangmonster/workspace-booking-service/internal/model/workspace"
+	pb "github.com/golangmonster/workspace-booking-service/pkg/api/workspace/v1"
 )
 
 func (i *Implementation) GetWorkspaceById(ctx context.Context, req *pb.GetWorkspaceByIdRequest) (*pb.GetWorkspaceByIdResponse, error) {
