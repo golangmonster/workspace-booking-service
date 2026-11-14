@@ -39,25 +39,8 @@ services:
       KAFKA_ADVERTISED_LISTENERS: "PLAINTEXT://broker:9092,PLAINTEXT_HOST://localhost:9091"
       KAFKA_CONTROLLER_QUORUM_VOTERS: "1@controller:29092"
       CLUSTER_ID: "MkU3OEVBNTcwNTJENDM2Qk"
-
-  kafka-init-topics:
-    image: confluentinc/cp-kafka:7.6.1
-    container_name: kafka-init-topics
-    env_file:
-      - .env
-    depends_on:
-      - broker
-    entrypoint: [ "sh", "-c" ]
-    command: |
-      "
-      echo 'Waiting for Kafka to be ready...'
-      cub kafka-ready -b broker:9092 1 30
-
-      echo 'Creating Kafka topics...'
-      kafka-topics --create --if-not-exists --bootstrap-server broker:9092 --partitions 1 --replication-factor 1 --topic ${KAFKA_WORKSPACE_BOOKING_TOPIC}
-
-      echo 'All topics created successfully!'
-      "
+      # Создавать топики при продюсинге
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: 'true'
 
   kafka-ui:
     image: provectuslabs/kafka-ui:latest
@@ -94,8 +77,47 @@ services:
     networks:
       - workspace_booking_network
 
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./monitoring/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus_volume:/prometheus
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yml" # Сюда проброшен файл конфигурации
+      - "--storage.tsdb.path=/prometheus" # TSDB должна быть здесь, так как мы линкуем эту папку с нашим volume
+      - "--storage.tsdb.retention.time=30d" # Срок хранения метрик
+      - "--web.enable-lifecycle" # Возможность конфигурировать онлайн
+    restart: unless-stopped
+    networks:
+      - workspace_booking_network
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_PLUGINS_PREINSTALL_DISABLED=true
+      - GF_ANALYTICS_CHECK_FOR_UPDATES=false
+      - GF_ANALYTICS_CHECK_FOR_PLUGIN_UPDATES=false
+    restart: unless-stopped
+    depends_on:
+      - prometheus
+    volumes:
+      - ./monitoring/grafana/datasources.yml:/etc/grafana/provisioning/datasources/datasources.yml
+      - grafana_volume:/var/lib/grafana
+    networks:
+      - workspace_booking_network
+
 volumes:
   db_volume:
+  prometheus_volume:
+  grafana_volume:
     
 networks:
   workspace_booking_network:

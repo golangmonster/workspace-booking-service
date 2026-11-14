@@ -8,6 +8,8 @@ import (
 	"time"
 
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
+	"github.com/prometheus/client_golang/prometheus"
+	"github.com/prometheus/client_golang/prometheus/collectors"
 	"github.com/rs/cors"
 	log "github.com/sirupsen/logrus"
 	"go.uber.org/multierr"
@@ -18,6 +20,8 @@ import (
 
 	"github.com/golangmonster/workspace-booking-service/internal/config"
 	interceptor "github.com/golangmonster/workspace-booking-service/internal/controller/middleware/grpc"
+
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
 
 const (
@@ -34,12 +38,14 @@ type controller struct {
 	implementations []ImplementationAdapter
 	grpcServer      *grpc.Server
 	httpServer      *http.Server
+	promRegistry    *prometheus.Registry
 }
 
 func New(cfg *config.Config, implementations ...ImplementationAdapter) *controller {
 	return &controller{
 		cfg:             cfg,
 		implementations: implementations,
+		promRegistry:    prometheus.NewRegistry(),
 	}
 }
 
@@ -82,6 +88,11 @@ func (c *controller) ServeGRPC(ctx context.Context) {
 	if err != nil {
 		log.Fatalf("%v: failed to listen grpc port: %s", c.cfg.GRPCAddr, err)
 	}
+
+	c.promRegistry.MustRegister(
+		collectors.NewGoCollector(),                                       // runtime/metrics
+		collectors.NewProcessCollector(collectors.ProcessCollectorOpts{}), // CPU
+	)
 
 	c.grpcServer = grpc.NewServer(
 		grpc.ChainUnaryInterceptor(
@@ -139,6 +150,17 @@ func (c *controller) ServeHTTP(ctx context.Context) {
 		log.Infof("swagger addr: %s/docs", c.cfg.HTTPAddr)
 		if err = c.httpServer.ListenAndServe(); err != nil && !errors.Is(err, http.ErrServerClosed) {
 			log.Fatal(err, "failed to serve http")
+		}
+	}()
+
+	go func() {
+		http.Handle("/metrics", promhttp.HandlerFor(c.promRegistry, promhttp.HandlerOpts{
+			EnableOpenMetrics: true,
+			Registry:          c.promRegistry,
+		}))
+
+		if err := http.ListenAndServe(":8081", nil); err != nil {
+			log.Error(err, "continue serve health http")
 		}
 	}()
 }
