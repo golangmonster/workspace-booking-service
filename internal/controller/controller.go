@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"time"
 
+	grpcprom "github.com/grpc-ecosystem/go-grpc-middleware/providers/prometheus"
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/collectors"
@@ -20,7 +21,6 @@ import (
 
 	"github.com/golangmonster/workspace-booking-service/internal/config"
 	interceptor "github.com/golangmonster/workspace-booking-service/internal/controller/middleware/grpc"
-
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
 
@@ -89,13 +89,17 @@ func (c *controller) ServeGRPC(ctx context.Context) {
 		log.Fatalf("%v: failed to listen grpc port: %s", c.cfg.GRPCAddr, err)
 	}
 
+	grpcServerMetricsCollector := grpcprom.NewServerMetrics(grpcprom.WithServerHandlingTimeHistogram())
+
 	c.promRegistry.MustRegister(
 		collectors.NewGoCollector(),                                       // runtime/metrics
 		collectors.NewProcessCollector(collectors.ProcessCollectorOpts{}), // CPU
+		grpcServerMetricsCollector,                                        // gRPC metrics
 	)
 
 	c.grpcServer = grpc.NewServer(
 		grpc.ChainUnaryInterceptor(
+			grpcServerMetricsCollector.UnaryServerInterceptor(),
 			interceptor.WithValidation(),
 			interceptor.WithRecovery(),
 		),
@@ -104,6 +108,8 @@ func (c *controller) ServeGRPC(ctx context.Context) {
 	for _, imp := range c.implementations {
 		imp.RegisterServer(c.grpcServer)
 	}
+
+	grpcServerMetricsCollector.InitializeMetrics(c.grpcServer)
 
 	go func() {
 		reflection.Register(c.grpcServer)
