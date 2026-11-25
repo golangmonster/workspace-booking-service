@@ -109,7 +109,8 @@ services:
     depends_on:
       - prometheus
     volumes:
-      - ./monitoring/grafana/datasources.yml:/etc/grafana/provisioning/datasources/datasources.yml
+      - ./monitoring/grafana/dashboards:/var/lib/grafana/dashboards
+      - ./monitoring/grafana/provisioning:/etc/grafana/provisioning
       - grafana_volume:/var/lib/grafana
     networks:
       - workspace_booking_network
